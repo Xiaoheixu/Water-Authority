@@ -1,0 +1,17 @@
+{
+  "name": "dongchuan-water-authority-game",
+  "version": "1.0.0",
+  "description": "东川市水利局事件 - 深度推理解密游戏 (Express + Static Site)",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "install-deps": "cd server && npm install",
+    "build": "echo 'No build step required (static + express API)'"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

@@ -1,0 +1,23 @@
+# Dependencies
+server/node_modules/
+node_modules/
+package-lock.json
+
+# Logs
+*.log
+npm-debug.log*
+server/npm-debug.log*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+.env.*.local

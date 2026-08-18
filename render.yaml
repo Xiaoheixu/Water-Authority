@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: dongchuan-water-authority
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    healthCheckPath: "/"
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: PORT
+        sync: false # Render injects its own PORT; this suppresses local override warnings
