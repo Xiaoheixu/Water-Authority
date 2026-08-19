@@ -149,6 +149,12 @@ function closePhone() {
   if (overlay) overlay.classList.remove('active');
 }
 
+// ============ 移动端导航切换 ============
+function toggleNav() {
+  const nav = document.querySelector('.nav-inner');
+  if (nav) nav.classList.toggle('active');
+}
+
 // ============ 密码验证 ============
 function verifyPassword(inputId, errorId) {
   const input = document.getElementById(inputId);
@@ -206,6 +212,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     el.addEventListener('mouseleave', function () {
       this.style.color = '#f5f5f5';
+    });
+  });
+
+  // 移动端点击导航链接后自动收起菜单
+  document.querySelectorAll('.nav-inner a').forEach(function (el) {
+    el.addEventListener('click', function () {
+      const nav = document.querySelector('.nav-inner');
+      if (nav && nav.classList.contains('active')) nav.classList.remove('active');
     });
   });
 });

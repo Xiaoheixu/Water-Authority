@@ -70,6 +70,7 @@ a:hover { color: #c0392b; text-decoration: underline; }
 .main-nav {
   background: #1a5276;
 }
+.nav-toggle { display: none; }
 .nav-inner {
   max-width: 1200px;
   margin: 0 auto;
@@ -521,3 +522,190 @@ a:hover { color: #c0392b; text-decoration: underline; }
 .text-center { text-align: center; }
 .mt-20 { margin-top: 20px; }
 .mb-20 { margin-bottom: 20px; }
+
+/* ============ 移动端适配 ============ */
+html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+
+@media (max-width: 768px) {
+  body { font-size: 14px; line-height: 1.7; }
+
+  .top-bar-inner {
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 12px;
+    text-align: center;
+  }
+
+  .header-inner {
+    flex-direction: column;
+    text-align: center;
+    padding: 12px;
+    gap: 10px;
+  }
+  .header-logo { width: 56px; height: 56px; font-size: 22px; }
+  .header-title h1 { font-size: 22px; }
+  .header-title .subtitle { font-size: 12px; letter-spacing: 1px; }
+
+  /* 导航栏:移动端折叠 */
+  .nav-inner {
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .nav-inner.active { max-height: 400px; }
+  .nav-inner > li { flex: none; border-bottom: 1px solid #154360; }
+  .nav-inner > li:last-child { border-bottom: none; }
+  .nav-inner > li > a {
+    padding: 12px 0;
+    font-size: 15px;
+  }
+
+  .nav-toggle {
+    display: block;
+    width: 100%;
+    background: #154360;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  /* 主内容区:侧边栏下移 */
+  .main-wrap {
+    flex-direction: column;
+    padding: 0 10px;
+    gap: 15px;
+    margin: 15px auto;
+  }
+  .content-main { padding: 20px 15px; min-height: 300px; }
+  .content-side { width: 100%; }
+
+  .page-title { font-size: 20px; margin-bottom: 18px; }
+  .breadcrumb { font-size: 12px; }
+
+  /* 文章 */
+  .article-body { font-size: 15px; line-height: 1.9; }
+  .article-body h2 { font-size: 18px; margin: 20px 0 12px; }
+  .article-body p { margin-bottom: 14px; }
+  .article-meta { font-size: 12px; }
+
+  /* 数据表格:横向滚动 */
+  .data-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .data-table { font-size: 13px; min-width: 500px; }
+  .data-table th, .data-table td { padding: 6px 8px; }
+
+  /* 新闻列表 */
+  .news-list li { flex-wrap: wrap; gap: 4px; }
+  .news-list .news-date { margin-left: 0; width: 100%; font-size: 12px; }
+
+  /* 联系信息 */
+  .contact-block { padding: 12px; }
+  .contact-label { display: block; width: auto; margin-bottom: 2px; }
+
+  /* 页脚 */
+  .site-footer { padding: 20px 0; font-size: 12px; }
+  .footer-links a { margin: 0 4px; }
+
+  /* 图片自适应 */
+  .content-main img,
+  .article-body img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px auto;
+  }
+
+  /* 电话弹窗 */
+  .phone-modal {
+    width: 92vw;
+    max-width: 340px;
+    padding: 20px 18px;
+    border-radius: 18px;
+  }
+  .phone-screen {
+    min-height: 140px;
+    max-height: 220px;
+    font-size: 13px;
+    padding: 12px;
+  }
+  .phone-number { font-size: 20px; letter-spacing: 1px; }
+  .phone-hangup { padding: 14px; font-size: 16px; }
+
+  /* 邮件弹窗 */
+  .email-modal {
+    width: 95vw;
+    max-width: none;
+    max-height: 92vh;
+    border-radius: 8px;
+  }
+  .email-header { padding: 12px 14px; }
+  .email-compose { padding: 14px; }
+  .email-field input, .email-field textarea { font-size: 16px; }
+  .email-send { width: 100%; padding: 12px; font-size: 16px; }
+  .email-reply { font-size: 13px; padding: 14px; }
+
+  /* 密码门 */
+  .password-gate {
+    margin: 30px 12px;
+    padding: 25px 20px;
+  }
+  .password-gate input { font-size: 16px; padding: 14px; }
+  .password-gate button { padding: 14px; font-size: 16px; }
+
+  /* 档案/真相页 */
+  .dark-page .note-body { padding: 25px 15px; font-size: 15px; }
+  .truth-archive { padding: 25px 15px; font-size: 15px; line-height: 2; }
+  .truth-archive h2 { font-size: 19px; }
+  .truth-archive h3 { font-size: 17px; }
+  .truth-archive .evidence { padding: 12px 15px; font-size: 13px; }
+  .truth-archive .warning { font-size: 16px; padding: 15px; }
+
+  /* 触摸热区:增大点击区域 */
+  .clickable-phone,
+  .clickable-email {
+    min-height: 44px;
+    display: inline-block;
+    padding: 4px 2px;
+  }
+  .nav-inner > li > a {
+    min-height: 44px;
+    line-height: 1.8;
+  }
+  .phone-hangup,
+  .email-send,
+  .password-gate button {
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  body { font-size: 13px; }
+  .header-title h1 { font-size: 19px; }
+  .header-title .subtitle { font-size: 11px; }
+  .page-title { font-size: 18px; }
+  .article-body { font-size: 14px; line-height: 1.8; }
+  .phone-modal { padding: 18px 14px; }
+  .phone-number { font-size: 18px; }
+  .email-reply { font-size: 12px; }
+}
+
+/* 横屏优化(高度较小) */
+@media (max-height: 500px) and (orientation: landscape) {
+  .phone-screen { max-height: 160px; min-height: 100px; }
+  .phone-modal { padding: 18px 20px; }
+  .phone-name { margin-bottom: 8px; }
+  .phone-number { margin-bottom: 10px; }
+}
+
+/* 安全区域适配(iPhone刘海屏) */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .site-footer {
+    padding-bottom: calc(30px + env(safe-area-inset-bottom));
+  }
+  .email-modal {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
