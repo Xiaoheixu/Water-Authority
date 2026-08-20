@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>结局S · 薪火相传</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  background: #05070a;
+  min-height: 100vh;
+  font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+  overflow-x: hidden;
+}
+.top-link {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 15px 20px;
+  background: rgba(5,7,10,0.92);
+  border-bottom: 1px solid #1a2030;
+  z-index: 100;
+}
+.top-link a {
+  color: #4a5870;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.top-link a:hover {
+  color: #8aa0c0;
+}
+.s-container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 100px 30px 80px;
+}
+.s-title {
+  text-align: center;
+  margin-bottom: 60px;
+  opacity: 0;
+  animation: fadeInTitle 2s ease forwards;
+}
+.s-title h1 {
+  font-size: 38px;
+  color: #d4af37;
+  letter-spacing: 8px;
+  font-weight: bold;
+  text-shadow: 0 0 30px rgba(212,175,55,0.4);
+}
+.s-title .title-en {
+  font-size: 12px;
+  color: #5a5a4a;
+  letter-spacing: 6px;
+  margin-top: 14px;
+  text-transform: uppercase;
+}
+@keyframes fadeInTitle {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.typewriter-wrap {
+  font-size: 17px;
+  line-height: 2.4;
+  color: #b8c4d4;
+  text-shadow: 0 0 6px rgba(184,196,212,0.15);
+  min-height: 600px;
+}
+.type-line {
+  opacity: 0;
+  margin-bottom: 16px;
+  text-indent: 0;
+}
+.type-line.show {
+  opacity: 1;
+  animation: typeLineIn 0.6s ease forwards;
+}
+@keyframes typeLineIn {
+  0% { opacity: 0; transform: translateX(-5px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+.type-line .char {
+  opacity: 0;
+  display: inline;
+}
+.type-line .char.show {
+  opacity: 1;
+  animation: charFade 0.08s ease forwards;
+}
+@keyframes charFade {
+  0% { opacity: 0; text-shadow: 0 0 12px rgba(212,175,55,0.5); }
+  100% { opacity: 1; text-shadow: 0 0 6px rgba(184,196,212,0.15); }
+}
+.verdict-line {
+  background: rgba(44,62,80,0.25);
+  border-left: 3px solid #d4af37;
+  padding: 14px 20px;
+  margin: 12px 0;
+  font-size: 15px;
+  line-height: 2;
+  color: #c9b97a;
+}
+.stats-line {
+  text-align: center;
+  font-family: "Consolas", monospace;
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: #8aa0c0;
+  padding: 14px 0;
+  margin: 18px 0;
+  border-top: 1px solid #222a38;
+  border-bottom: 1px solid #222a38;
+}
+.final-line {
+  text-align: center;
+  font-size: 18px;
+  line-height: 2.2;
+  letter-spacing: 2px;
+  margin-top: 35px !important;
+  color: #d4af37;
+}
+.end-mark {
+  text-align: center;
+  font-size: 24px;
+  color: #8aa0c0;
+  letter-spacing: 6px;
+  margin: 50px 0 25px !important;
+  text-shadow: 0 0 16px rgba(138,160,192,0.25);
+}
+.thanks-line {
+  text-align: center;
+  font-size: 14px;
+  color: rgba(184,196,212,0.65);
+  letter-spacing: 1px;
+  line-height: 2;
+  margin-top: 20px !important;
+}
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background: #d4af37;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blinkCursor 0.8s infinite;
+}
+@keyframes blinkCursor {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+.s-footer {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 30px 30px 60px;
+  border-top: 1px solid #1a2030;
+  text-align: center;
+  color: #4a5870;
+  font-size: 13px;
+  line-height: 2;
+  opacity: 0;
+  animation: footerFade 2s ease 60s forwards;
+}
+.s-footer a {
+  color: #6a7a90;
+  border-bottom: 1px dashed #3a4860;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.s-footer a:hover {
+  color: #8aa0c0;
+  border-bottom-color: #8aa0c0;
+}
+@keyframes footerFade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.55) 100%);
+  pointer-events: none;
+  z-index: 50;
+}
+</style>
+</head>
+<body>
+
+<div class="top-link">
+  <a href="/index.html">&laquo; 返回官网首页</a>
+</div>
+
+<div class="s-container">
+  <div class="s-title">
+    <h1>S · 薪 火 相 传</h1>
+    <div class="title-en">Secret Ending · Passing the Torch</div>
+  </div>
+
+  <div class="typewriter-wrap" id="typewriter">
+  </div>
+</div>
+
+<div class="s-footer">
+  <p><a href="/ending-reset">重新开始：清除本会话进度后返回首页</a></p>
+  <p style="margin-top:15px; font-family:'Consolas',monospace; color:#3a4860;">
+    [ 本结局编号：S &nbsp; 完成度：100% ]
+  </p>
+</div>
+
+<script>
+(function(){
+  var lines = [
+    { type: 'text', content: '你推开197号柜背面的暗格。' },
+    { type: 'text', content: '暗格里没有镜子,只有一卷微缩胶片、一张硬盘备份标签和七个人的合影。' },
+    { type: 'stats', content: '胶片·1卷  |  硬盘标签·1张  |  合影·1张  |  家属联系纸条·1张' },
+    { type: 'text', content: '胶片里印着方学礼2017年地质勘探报告的原件——地下26米处的人工夯土层、青砖碎块、朽木棺板,疑为明清土司家族墓葬群,明确建议停工报文物部门。' },
+    { type: 'text', content: '硬盘标签背面写着一行小字:"给下一个愿意查到底的人。七个人不是终点,是起点。HDD-ZHS-20240213"。' },
+    { type: 'text', content: '合影背后,七个名字一个一个地对应着七名失踪工人:王大有、刘小富、赵铁柱、孙来喜、马德海、周阿毛、杨二牛。' },
+    { type: 'text', content: '最后,用铅笔写着另一行小字,笔迹是周海生的:' },
+    { type: 'verdict', content: '"如果你是2026年8月新入职的同事——我猜你会翻到这里。三年前我就知道,这个位置空了之后,会有人坐上来继续查。加油。别像我一样,一个人硬扛。——周海生,2024.02.13"' },
+    { type: 'text', content: '你忽然想起,今天是2026年8月17日。就是你入职第14天,接手周海生空出来的副总工工位的日子。' },
+    { type: 'text', content: '他三年前就预判了,会有一个新人坐在他的位置上,翻他翻过的档案,走他走过的路。' },
+    { type: 'text', content: '暗格关上的那一刻,你终于懂了——你不是第一个查清的人,也不会是最后一个。证据链像接力棒,一棒传一棒,总会有人跑完最后一程。' },
+    { type: 'stats', content: '━━━━━ 专案一审 · 公开宣判 · 2026年11月 ━━━━━' },
+    { type: 'verdict', content: '赵德明,犯贪污受贿罪、故意杀人罪、重大责任事故罪,数罪并罚,决定执行死刑,缓期二年执行,剥夺政治权利终身,并处没收个人全部财产,对其限制减刑。' },
+    { type: 'verdict', content: '孙卫国,犯故意杀人罪、包庇罪,系主犯,罪行极其严重,决定执行死刑,剥夺政治权利终身,最高人民法院依法核准。' },
+    { type: 'verdict', content: '其余三名同案被告人,分别以故意杀人罪从犯、包庇罪、伪证罪,判处无期徒刑一人,有期徒刑十八年二人。' },
+    { type: 'stats', content: '━━━━━ 后续执行 · 2026年12月—2027年6月 ━━━━━' },
+    { type: 'text', content: '七名工人遗骸从库区西南侧的隐蔽掩埋点挖出,DNA比对与七名家属样本完全匹配。' },
+    { type: 'text', content: '家属提起刑事附带民事诉讼,获赔金额合计2147万元,均于判决生效后30日内履行完毕。' },
+    { type: 'text', content: '七名工人的骨灰于2027年清明节在各自老家下葬,你作为证人代表参加了其中三场葬礼。' },
+    { type: 'text', content: '青溪村全线改接山泉水管道,项目由省政府专项拨款,工期47天,通水当天水质检测全部指标优于国标。' },
+    { type: 'text', content: '东川水库暂停运营。库区下方的古代土司墓葬群由省考古研究院进驻抢救性发掘,至2027年夏已出土文物1273件,列入省级文物保护单位。' },
+    { type: 'text', content: '方学礼博士的原始勘探报告作为核心呈堂证供,载入案卷。其家属获颁"文物保护贡献奖"及抚恤金。' },
+    { type: 'stats', content: '━━━━━ 尾声 · 2027年9月1日 ━━━━━' },
+    { type: 'text', content: '9月1号,开学日。你开车送周小雨去新学校——她转学了,离开了青溪村,去外婆家住,那里的水是干净的。' },
+    { type: 'text', content: '她背着新书包,手里攥着她爸的旧工作证挂绳,挂绳上挂着一枚水利局的旧铜徽章。' },
+    { type: 'text', content: '下车前,她忽然转过头对你说:"叔叔,我爸日记里写过一句话,我抄在本子上了。"' },
+    { type: 'verdict', content: '"如果光不亮了,就自己点一根蜡烛。如果蜡烛也灭了,就等着——会有下一个人,带着打火机来。"' },
+    { type: 'final', content: '你站在校门口,看着她的背影跑进教学楼。' },
+    { type: 'final', content: '风从东边吹过来,带着桂花的香气。' },
+    { type: 'final', content: '水管的拍打声,终于停了。' },
+    { type: 'end', content: '· END ·' },
+    { type: 'thanks', content: '（感谢你玩到了最后。正义或许会迟到,但不会缺席。愿每个挺身而出的人,都能平安回家。）' }
+  ];
+
+  var container = document.getElementById('typewriter');
+  var cursorDelay = 80;
+  var lineDelay = 500;
+
+  function typeChar(el, text, idx, callback) {
+    if (idx >= text.length) {
+      if (callback) callback();
+      return;
+    }
+    var span = document.createElement('span');
+    span.className = 'char';
+    span.textContent = text[idx];
+    el.appendChild(span);
+    setTimeout(function(){
+      span.classList.add('show');
+      setTimeout(function(){
+        typeChar(el, text, idx + 1, callback);
+      }, cursorDelay);
+    }, 10);
+  }
+
+  function processLine(idx) {
+    if (idx >= lines.length) {
+      var cursors = document.querySelectorAll('.cursor');
+      cursors.forEach(function(c){ c.remove(); });
+      return;
+    }
+    var line = lines[idx];
+    var lineEl = document.createElement('div');
+
+    if (line.type === 'stats') {
+      lineEl.className = 'stats-line type-line';
+      lineEl.textContent = line.content;
+      container.appendChild(lineEl);
+      setTimeout(function(){
+        lineEl.classList.add('show');
+        setTimeout(function(){ processLine(idx + 1); }, lineDelay * 0.6);
+      }, 200);
+      return;
+    }
+
+    if (line.type === 'verdict') {
+      lineEl.className = 'verdict-line type-line';
+    } else if (line.type === 'final') {
+      lineEl.className = 'final-line type-line';
+    } else if (line.type === 'end') {
+      lineEl.className = 'end-mark type-line';
+    } else if (line.type === 'thanks') {
+      lineEl.className = 'thanks-line type-line';
+    } else {
+      lineEl.className = 'text-line type-line';
+      lineEl.style.textIndent = '2em';
+    }
+
+    container.appendChild(lineEl);
+    lineEl.classList.add('show');
+
+    var cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    lineEl.appendChild(cursor);
+
+    typeChar(lineEl, line.content, 0, function(){
+      cursor.remove();
+      setTimeout(function(){ processLine(idx + 1); }, lineDelay);
+    });
+  }
+
+  setTimeout(function(){ processLine(0); }, 2500);
+})();
+</script>
+
+</body>
+</html>

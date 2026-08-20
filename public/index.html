@@ -3,136 +3,643 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>东川市水利局</title>
+<title>东川市水利局官方网站</title>
 <link rel="stylesheet" href="/css/style.css">
+<style>
+.oa-login {
+  background: linear-gradient(180deg, #d42028 0%, #a81218 100%);
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 2px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: inherit;
+  letter-spacing: 1px;
+  margin-left: 16px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 6px rgba(200,22,29,0.25);
+  white-space: nowrap;
+}
+.oa-login:hover {
+  background: linear-gradient(180deg, #e5252d 0%, #b8151c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(200,22,29,0.35);
+}
+.header-right-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.image-news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  padding: 4px 0;
+}
+.image-news-item {
+  display: block;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.image-news-item:hover { text-decoration: none; }
+.image-news-item .img-box {
+  width: 100%;
+  height: 110px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  margin-bottom: 8px;
+  background: #f5f5f5;
+}
+.image-news-item .img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.image-news-item:hover .img-box img { transform: scale(1.05); }
+.image-news-item .img-title {
+  font-size: 13px;
+  color: #333;
+  line-height: 1.5;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 2px;
+}
+.image-news-item:hover .img-title { color: #c8161d; }
+.friend-links {
+  width: 1200px;
+  margin: 0 auto 20px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.friend-links .links-title {
+  background: linear-gradient(180deg, #286090 0%, #1f4e79 100%);
+  color: #fff;
+  padding: 0 16px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  position: relative;
+  padding-left: 28px;
+}
+.friend-links .links-title::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 16px;
+  background: #c8161d;
+  border-radius: 2px;
+}
+.friend-links .links-body {
+  padding: 14px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  align-items: center;
+}
+.friend-links .links-body a {
+  font-size: 13px;
+  color: #555;
+  padding: 4px 0;
+  position: relative;
+  padding-left: 12px;
+}
+.friend-links .links-body a::before {
+  content: "▸";
+  color: #c8161d;
+  font-size: 10px;
+  position: absolute;
+  left: 0;
+  opacity: 0.7;
+}
+.friend-links .links-body a:hover { color: #c8161d; }
+/* 水管音效按钮已移除（玩家反馈不需要·2026.08） */
+.notice-list li .notice-title.obituary-tag {
+  color: #888 !important;
+}
+.notice-list li .notice-title.obituary-tag::after {
+  content: "讣告";
+  display: inline-block;
+  background: #f0f0f0;
+  color: #666;
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 2px;
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: 0.5px;
+  border: 1px solid #ddd;
+}
+.archive-entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 500;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  margin-left: 12px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.archive-entry:hover {
+  background: linear-gradient(180deg, #3d4758 0%, #2a303c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+}
+.archive-entry .archive-icon {
+  font-size: 14px;
+}
+.archive-entry .archive-text {
+  font-size: 13px;
+}
+.archive-entry .archive-badge {
+  background: rgba(16,185,129,0.2);
+  color: #10b981;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Consolas', monospace;
+}
+@media (max-width: 768px) {
+  .archive-entry .archive-text { display: none; }
+  .archive-entry { padding: 8px 10px; margin-left: 8px; }
+}
+.water-table tbody tr.anomaly-row {
+  cursor: pointer;
+}
+.water-table tbody tr.anomaly-row:hover td {
+  background: #ffe8e8 !important;
+}
+</style>
 </head>
 <body>
 
-<!-- 顶部条 -->
 <div class="top-bar">
-  <div class="top-bar-inner">
-    <span>欢迎访问东川市水利局官方网站</span>
-    <span>
-      <a href="#">无障碍浏览</a> | <a href="#">English</a> | <a href="/sitemap.html">网站地图</a>
-    </span>
-  </div>
-</div>
-
-<!-- 头部 -->
-<div class="site-header">
-  <div class="header-inner">
-    <div class="header-logo">水</div>
-    <div class="header-title">
-      <h1>东川市水利局</h1>
-      <div class="subtitle">DONGCHUAN MUNICIPAL WATER AUTHORITY</div>
+  <div class="container">
+    <div class="top-bar-left">
+      <span id="fangxiao-trigger" title="查看方晓微信截图" style="cursor:pointer;user-select:none;border-bottom:1px dotted rgba(255,255,255,0.35);">欢迎访问东川市水利局官方网站！</span>
+      <span>今天是 2026年8月20日 星期四</span>
+    </div>
+    <div class="top-bar-right">
+      <a href="#">无障碍浏览</a>
+      <a href="#">长者浏览</a>
+      <a href="/sitemap.html">网站地图</a>
+      <a href="#" class="lang-switch">English</a>
     </div>
   </div>
 </div>
 
-<!-- 导航 -->
+<div class="site-header">
+  <div class="container">
+    <div class="header-brand">
+      <div class="header-logo"><img src="/images/logo.svg" alt="东川市水利局标志"></div>
+      <div class="header-titles">
+        <h1>东川市水利局</h1>
+        <div class="subtitle-en">DONGCHUAN MUNICIPAL WATER AUTHORITY</div>
+      </div>
+    </div>
+    <div class="header-right-wrap">
+      <div class="header-search">
+        <div class="search-form">
+          <input type="text" class="search-input" placeholder="请输入搜索关键词...">
+          <button type="button" class="search-btn">搜索</button>
+        </div>
+      </div>
+      <button type="button" class="archive-entry" id="dc-archive-entry" title="查看案件档案">
+        <span class="archive-icon">📂</span>
+        <span class="archive-text">案件档案</span>
+        <span class="archive-badge" id="dc-archive-badge">0/31</span>
+      </button>
+      <button type="button" class="oa-login" onclick="alert('请使用OA系统账号登录');">OA登录</button>
+    </div>
+  </div>
+</div>
+
 <nav class="main-nav">
   <button class="nav-toggle" onclick="toggleNav()" aria-label="菜单">☰ 菜单</button>
   <ul class="nav-inner">
-    <li><a href="/index.html">首页</a></li>
-    <li><a href="/about.html">组织机构</a></li>
-    <li><a href="/news.html">新闻动态</a></li>
-    <li><a href="/notice.html">通知公告</a></li>
-    <li><a href="/water-data.html">水文监测</a></li>
-    <li><a href="/contact.html">联系我们</a></li>
+    <li class="active">
+      <a href="/index.html">网站首页</a>
+    </li>
+    <li>
+      <a href="/news.html">资讯中心</a>
+      <ul class="submenu">
+        <li><a href="/news.html">工作动态</a></li>
+        <li><a href="/notice.html">通知公告</a></li>
+        <li><a href="/news.html">水利要闻</a></li>
+        <li><a href="/news.html">基层水事</a></li>
+        <li><a href="/news.html">媒体聚焦</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">政府信息公开</a>
+      <ul class="submenu">
+        <li><a href="#">公开指南</a></li>
+        <li><a href="#">公开制度</a></li>
+        <li><a href="#">公开年报</a></li>
+        <li><a href="/about-leaders.html">领导介绍</a></li>
+        <li><a href="/about-offices.html">内设科室</a></li>
+        <li><a href="#">直属单位</a></li>
+        <li><a href="#">规范性文件</a></li>
+        <li><a href="#">其他文件</a></li>
+        <li><a href="#">政策解读</a></li>
+        <li><a href="/planning.html">规划计划</a></li>
+        <li><a href="#">水资源公报</a></li>
+        <li><a href="#">水质公报</a></li>
+        <li><a href="/water-data.html">水文监测</a></li>
+        <li><a href="#">人事任免</a></li>
+        <li><a href="#">招考录用</a></li>
+        <li><a href="/hr-obituary.html">讣告</a></li>
+        <li><a href="/finance.html">部门预算</a></li>
+        <li><a href="#">部门决算</a></li>
+        <li><a href="#">三公经费</a></li>
+        <li><a href="/apply-public.html">依申请公开</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">政务服务</a>
+      <ul class="submenu">
+        <li><a href="/service.html">办事指南</a></li>
+        <li><a href="#">在线办理</a></li>
+        <li><a href="#">结果公示</a></li>
+        <li><a href="#">权责清单</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">互动交流</a>
+      <ul class="submenu">
+        <li><a href="/letter.html">领导信箱</a></li>
+        <li><a href="/liuyan.html">网上留言</a></li>
+        <li><a href="#">民意征集</a></li>
+        <li><a href="#">在线访谈</a></li>
+        <li><a href="#">网上信访</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">专题专栏</a>
+      <ul class="submenu">
+        <li><a href="/hechangzhi.html">河长制湖长制</a></li>
+        <li><a href="/dangjian.html">党建工作</a></li>
+        <li><a href="#">安全生产</a></li>
+        <li><a href="#">节水宣传</a></li>
+        <li><a href="/news-reservoir.html">水库建设专栏</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="/sitemap.html">网站导航</a>
+    </li>
   </ul>
 </nav>
 
-<!-- 横幅图 -->
-<div style="max-width:1200px; margin:20px auto 0; padding:0 20px;">
-  <img src="/images/banner-reservoir.jpg" alt="东川水库全景" style="width:100%; display:block; border:1px solid #ddd; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-  <p style="color:#888; font-size:13px; margin-top:6px; text-align:right;">东川水库库区全景 · 摄于2025年春汛前</p>
-</div>
-
-<!-- 主内容 -->
-<div class="main-wrap">
-  <div class="content-main">
-    <h2 class="page-title">工作动态</h2>
-    <ul class="news-list">
-      <li>
-        <span class="news-title"><a href="/news-reservoir.html">东川水库主体工程全面完工 通水仪式隆重举行</a></span>
-        <span class="news-date">2019-06-15</span>
-      </li>
-      <li>
-        <span class="news-title"><a href="/news.html">我局完成2025年度防汛抗旱专项检查工作</a></span>
-        <span class="news-date">2025-10-20</span>
-      </li>
-      <li>
-        <span class="news-title"><a href="/news.html">关于2024年度水文监测数据归档工作的通知</a></span>
-        <span class="news-date">2024-12-30</span>
-      </li>
-      <li>
-        <span class="news-title"><a href="/news.html">东川市河长制工作推进会议召开</a></span>
-        <span class="news-date">2025-07-14</span>
-      </li>
-      <li>
-        <span class="news-title"><a href="/news.html">我局档案馆完成旧档整理移交工作</a></span>
-        <span class="news-date">2025-09-18</span>
-      </li>
-      <li>
-        <span class="news-title"><a href="/news.html">关于人事变动的通知</a></span>
-        <span class="news-date">2025-09-01</span>
-      </li>
-    </ul>
+<div class="carousel-wrap" id="carousel">
+  <div class="carousel-slide">
+    <img src="/images/banner-reservoir.jpg" alt="东川水库全景">
+    <div class="carousel-caption">
+      <h3>东川水库主体工程全面完工</h3>
+      <p>全市重点民生水利工程——东川水库于2019年6月正式建成通水，惠及百万群众</p>
+    </div>
   </div>
-
-  <div class="content-side">
-    <div class="side-box">
-      <div class="side-box-title">通知公告</div>
-      <div class="side-box-body">
-        <ul>
-          <li><a href="/notice.html">关于档案室搬迁的通知</a></li>
-          <li><a href="/notice.html">关于规范值班电话使用的通知</a></li>
-          <li><a href="/notice.html">东川水库2026年度蓄水计划</a></li>
-          <li><a href="/notice.html">关于职工体检的安排</a></li>
-        </ul>
+  <div class="carousel-slide" style="display:none;">
+    <div style="width:100%;height:100%;background:linear-gradient(135deg,#286090 0%,#1a4268 50%,#0f2d48 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22600%22 viewBox=%220 0 600 600%22><path d=%22M0,400 Q75,340 150,400 T300,400 T450,400 T600,400 L600,600 L0,600 Z%22 fill=%22rgba(255,255,255,0.06)%22/><path d=%22M0,450 Q75,400 150,450 T300,450 T450,450 T600,450 L600,600 L0,600 Z%22 fill=%22rgba(255,255,255,0.04)%22/></svg>') bottom center no-repeat;"></div>
+      <div style="position:relative;z-index:1;text-align:center;color:#fff;padding:0 60px;">
+        <div style="font-size:72px;margin-bottom:16px;">🏞️</div>
+        <h3 style="font-size:28px;margin-bottom:12px;letter-spacing:3px;text-shadow:1px 1px 4px rgba(0,0,0,0.3);">全面推行河长制湖长制</h3>
+        <p style="font-size:16px;opacity:0.92;max-width:720px;margin:0 auto;line-height:1.8;">守好绿水青山 · 护好一江清水 · 落实五级河长体系 · 建设水美东川</p>
       </div>
     </div>
-    <div class="side-box">
-      <div class="side-box-title">快捷服务</div>
-      <div class="side-box-body">
-        <ul>
-          <li><a href="/water-data.html">实时水文数据</a></li>
-          <li><a href="/contact.html">监督举报电话</a></li>
-          <li><a href="/about.html">机构职能介绍</a></li>
-          <li><a href="/sitemap.html">网站地图导航</a></li>
-        </ul>
+    <div class="carousel-caption">
+      <h3>河长制湖长制工作专栏</h3>
+      <p>落实绿色发展理念，全面推行河湖长制，守护东川碧水蓝天</p>
+    </div>
+  </div>
+  <div class="carousel-slide" style="display:none;">
+    <div style="width:100%;height:100%;background:linear-gradient(135deg,#1e6b4e 0%,#14523b 50%,#0a3a27 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22 viewBox=%220 0 400 400%22><circle cx=%2280%22 cy=%2280%22 r=%2240%22 fill=%22rgba(255,255,255,0.05)%22/><circle cx=%22320%22 cy=%22120%22 r=%2260%22 fill=%22rgba(255,255,255,0.04)%22/><circle cx=%22200%22 cy=%22280%22 r=%2280%22 fill=%22rgba(255,255,255,0.03)%22/></svg>');"></div>
+      <div style="position:relative;z-index:1;text-align:center;color:#fff;padding:0 60px;">
+        <div style="font-size:72px;margin-bottom:16px;">💧</div>
+        <h3 style="font-size:28px;margin-bottom:12px;letter-spacing:3px;text-shadow:1px 1px 4px rgba(0,0,0,0.3);">节约用水 人人有责</h3>
+        <p style="font-size:16px;opacity:0.92;max-width:720px;margin:0 auto;line-height:1.8;">国家节水型城市创建 · 惜水爱水节水 · 共建美好家园 · 每一滴水都值得珍惜</p>
       </div>
     </div>
-    <div class="side-box">
-      <div class="side-box-title">值班电话</div>
-      <div class="side-box-body">
-        <p style="font-size:14px; line-height:2;">
-          办公室:<br>
-          <span class="clickable-phone" data-number="0587-62190001" data-name="东川市水利局值班室">0587-62190001</span><br>
-          <span style="color:#999;font-size:12px;">(工作时间:周一至周五 9:00-17:00)</span>
-        </p>
-      </div>
+    <div class="carousel-caption">
+      <h3>节水宣传教育专题</h3>
+      <p>深入贯彻节水优先方针，全面推进节水型社会建设</p>
     </div>
+  </div>
+  <button class="carousel-arrow prev" onclick="carouselMove(-1)">‹</button>
+  <button class="carousel-arrow next" onclick="carouselMove(1)">›</button>
+  <div class="carousel-dots">
+    <span class="active" onclick="carouselGo(0)"></span>
+    <span onclick="carouselGo(1)"></span>
+    <span onclick="carouselGo(2)"></span>
   </div>
 </div>
 
-<!-- 页脚 -->
+<div class="home-row">
+  <div class="col-left">
+    <div class="panel">
+      <div class="panel-title">
+        <span class="title-text">政务公开</span>
+        <a href="#" class="more">更多</a>
+      </div>
+      <div class="panel-body" style="padding:0;">
+        <div class="quick-icons">
+          <a class="quick-item" href="#">
+            <span class="icon-emoji">📋</span>
+            <span class="icon-text">公开指南</span>
+          </a>
+          <a class="quick-item" href="#">
+            <span class="icon-emoji">📊</span>
+            <span class="icon-text">统计信息</span>
+          </a>
+          <a class="quick-item" href="#">
+            <span class="icon-emoji">📁</span>
+            <span class="icon-text">政策文件</span>
+          </a>
+          <a class="quick-item" href="#">
+            <span class="icon-emoji">📰</span>
+            <span class="icon-text">新闻发布</span>
+          </a>
+          <a class="quick-item" href="#">
+            <span class="icon-emoji">🗂️</span>
+            <span class="icon-text">规划计划</span>
+          </a>
+          <a class="quick-item" href="#">
+            <span class="icon-emoji">📝</span>
+            <span class="icon-text">人事信息</span>
+          </a>
+          <a class="quick-item" href="#">
+            <span class="icon-emoji">📑</span>
+            <span class="icon-text">财政信息</span>
+          </a>
+          <a class="quick-item" href="/apply-public.html">
+            <span class="icon-emoji">📡</span>
+            <span class="icon-text">依申请公开</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">
+        <span class="title-text">实时水情</span>
+        <a href="/water-data.html" class="more">水情详情</a>
+      </div>
+      <div class="panel-body">
+        <div class="water-table-wrap">
+          <table class="water-table">
+            <caption>数据更新:2026-08-20 08:00</caption>
+            <thead>
+              <tr>
+                <th>站点编号</th>
+                <th>站点名称</th>
+                <th>水位(m)</th>
+                <th>流量(m³/s)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>WS-0102</td>
+                <td class="station-name">清江干流站</td>
+                <td class="normal">862.35</td>
+                <td class="normal">128.4</td>
+              </tr>
+              <tr>
+                <td>WS-0103</td>
+                <td class="station-name">东川水库出库</td>
+                <td class="normal">925.70</td>
+                <td>45.2 <span style="color:#c8161d;">↑</span></td>
+              </tr>
+              <tr>
+                <td>WS-0743</td>
+                <td class="station-name warn">五星水文站</td>
+                <td class="warn">733.82 <span style="color:#c8161d;">↑↑</span></td>
+                <td class="warn">386.7 <span style="color:#c8161d;">↑↑</span></td>
+              </tr>
+              <tr>
+                <td>WS-0215</td>
+                <td class="station-name">白水河入江口</td>
+                <td class="normal">612.18</td>
+                <td>62.9 <span style="color:#2d8a4e;">↓</span></td>
+              </tr>
+              <tr>
+                <td>WS-0408</td>
+                <td class="station-name">龙潭溪站</td>
+                <td class="normal">548.64</td>
+                <td class="normal">18.3</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:10px;padding:8px 10px;background:#fff5f5;border:1px dashed #f5c2c4;border-radius:2px;font-size:12px;color:#c8161d;line-height:1.7;">
+          <strong>⚠ 预警提示：</strong>五星水文站(WS-0743)水位流量异常偏高，请相关部门加强监测，注意上游来水变化。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-right">
+    <div class="panel">
+      <div class="panel-title">
+        <span class="title-text">通知公告</span>
+        <a href="/notice.html" class="more">更多</a>
+      </div>
+      <div class="panel-body">
+        <ul class="notice-list">
+          <li>
+            <span class="notice-title"><a href="/notice.html">东川市水利局关于做好2026年防汛抗旱工作的通知</a></span>
+            <span class="notice-date">2026-08-18</span>
+          </li>
+          <li>
+            <span class="notice-title"><a href="/notice.html">关于2026年度水利工程职称评审工作的通知</a></span>
+            <span class="notice-date">2026-08-15</span>
+          </li>
+          <li>
+            <span class="notice-title new-tag"><a href="/notice.html">东川市水利局关于办公楼空调系统检修的通知</a></span>
+            <span class="notice-date">2026-08-14</span>
+          </li>
+          <li>
+            <span class="notice-title"><a href="/notice.html">关于开展2026年度水资源管理专项检查的通知</a></span>
+            <span class="notice-date">2026-08-10</span>
+          </li>
+          <li>
+            <span class="notice-title obituary-tag"><a href="/notice.html" onclick="reportClue('notice_archive_hint');">关于做好2019年度档案归档工作的补充通知</a></span>
+            <span class="notice-date">2019-12-28</span>
+          </li>
+          <li>
+            <span class="notice-title"><a href="/notice.html">东川市河长制办公室关于聘任第三届市级河湖社会监督员的公告</a></span>
+            <span class="notice-date">2026-08-05</span>
+          </li>
+          <li>
+            <span class="notice-title"><a href="/notice.html">关于东川水库库区禁止非法采砂作业的通告</a></span>
+            <span class="notice-date">2026-07-30</span>
+          </li>
+          <li>
+            <span class="notice-title"><a href="/notice.html">东川市水利局2026年度第二季度政府采购意向公开</a></span>
+            <span class="notice-date">2026-07-22</span>
+          </li>
+          <li>
+            <span class="notice-title"><a href="/notice.html">关于举办全市水利系统安全生产知识竞赛的通知</a></span>
+            <span class="notice-date">2026-07-15</span>
+          </li>
+          <li>
+            <span class="notice-title"><a href="/notice.html">东川市节水型社会建设达标县(区)公示</a></span>
+            <span class="notice-date">2026-07-08</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">
+        <span class="title-text">工作动态</span>
+        <a href="/news.html" class="more">更多</a>
+      </div>
+      <div class="panel-body">
+        <ul class="news-list">
+          <li>
+            <span class="news-title"><a href="/news.html">省水利厅调研组赴东川调研水库移民后扶工作</a></span>
+            <span class="news-date">2026-08-19</span>
+          </li>
+          <li>
+            <span class="news-title"><a href="/news.html">东川市召开2026年下半年河长制工作推进会</a></span>
+            <span class="news-date">2026-08-17</span>
+          </li>
+          <li>
+            <span class="news-title"><a href="/news.html">我市开展农村饮水安全保障专项排查行动</a></span>
+            <span class="news-date">2026-08-13</span>
+          </li>
+          <li>
+            <span class="news-title"><a href="/news-reservoir.html">东川水库获评省级"美丽河湖"示范工程</a></span>
+            <span class="news-date">2026-08-11</span>
+          </li>
+          <li>
+            <span class="news-title"><a href="/news.html">市水利局组织干部职工参观廉政警示教育基地</a></span>
+            <span class="news-date">2026-08-08</span>
+          </li>
+          <li>
+            <span class="news-title"><a href="/news.html">我市成功举办"世界水日·中国水周"主题宣传活动</a></span>
+            <span class="news-date">2026-08-05</span>
+          </li>
+          <li>
+            <span class="news-title"><a href="/news.html">东川市水文监测站网现代化改造项目通过验收</a></span>
+            <span class="news-date">2026-07-28</span>
+          </li>
+          <li>
+            <span class="news-title"><a href="/news.html">全市水利工程建设质量提升三年行动正式启动</a></span>
+            <span class="news-date">2026-07-21</span>
+          </li>
+          <li>
+            <span class="news-title"><a href="/news.html">清江干流防洪治理工程(东川段)开工建设</a></span>
+            <span class="news-date">2026-07-15</span>
+          </li>
+          <li>
+            <span class="news-title"><a href="/news.html">市水利局召开上半年工作总结暨下半年工作部署会</a></span>
+            <span class="news-date">2026-07-03</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">
+        <span class="title-text">图片新闻</span>
+        <a href="/news.html" class="more">更多</a>
+      </div>
+      <div class="panel-body">
+        <div class="image-news-grid">
+          <a class="image-news-item" href="/news.html">
+            <div class="img-box">
+              <img src="/images/gov-building.jpg" alt="水利局机关大楼">
+            </div>
+            <div class="img-title">市水利局机关新貌</div>
+          </a>
+          <a class="image-news-item" href="/news.html">
+            <div class="img-box">
+              <img src="/images/monitoring-station.jpg" alt="水文监测站">
+            </div>
+            <div class="img-title">现代化水文监测站投入运行</div>
+          </a>
+          <a class="image-news-item" href="/news-reservoir.html">
+            <div class="img-box">
+              <img src="/images/reservoir-dam.jpg" alt="水库大坝">
+            </div>
+            <div class="img-title">东川水库大坝全景</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="friend-links">
+  <div class="links-title">友情链接</div>
+  <div class="links-body">
+    <a href="http://www.mwr.gov.cn" target="_blank">中华人民共和国水利部</a>
+    <a href="#" target="_blank">云南省水利厅</a>
+    <a href="#" target="_blank">东川市人民政府</a>
+    <a href="#" target="_blank">曲靖市水利局</a>
+    <a href="#" target="_blank">会泽县水务局</a>
+    <a href="#" target="_blank">富源县水务局</a>
+    <a href="#" target="_blank">国家防汛抗旱总指挥部</a>
+    <a href="#" target="_blank">中国水文网</a>
+  </div>
+</div>
+
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-links">
-      <a href="/about.html">关于我们</a> |
-      <a href="/contact.html">联系我们</a> |
-      <a href="/sitemap.html">网站地图</a> |
-      <a href="#">隐私声明</a> |
-      <a href="#">网站统计</a>
+    <div class="footer-line">
+      <span><a href="#">关于我们</a><span class="sep">|</span></span>
+      <span><a href="/contact.html">联系我们</a><span class="sep">|</span></span>
+      <span><a href="/sitemap.html">网站地图</a><span class="sep">|</span></span>
+      <span><a href="#">隐私声明</a><span class="sep">|</span></span>
+      <span><a href="#">网站声明</a><span class="sep">|</span></span>
+      <span><a href="#">网站统计</a></span>
     </div>
-    <div>主办单位:东川市水利局 &nbsp; 地址:东川市清江路197号 &nbsp; 邮编:537000</div>
-    <div>备案号:东ICP备19170042号 &nbsp; 网站标识码:5300000047</div>
-    <div style="margin-top:8px; color:#5a7a8a;">© 2019-2026 东川市水利局 版权所有</div>
+    <div class="footer-line">
+      <span>主办单位:东川市水利局</span>
+      <span class="sep">|</span>
+      <span>地址:东川市清江路197号</span>
+      <span class="sep">|</span>
+      <span>邮编:537000</span>
+    </div>
+    <div class="footer-line">
+      <span>办公室电话:<span class="clickable-phone" data-number="0587-62190001" data-name="东川市水利局值班室">0587-62190001</span></span>
+      <span class="sep">|</span>
+      <span>邮箱:<span class="clickable-email" data-email="slj@dongchuan.gov.cn" data-name="东川市水利局办公室">slj@dongchuan.gov.cn</span></span>
+    </div>
+    <div class="footer-line">
+      <span>备案号:东ICP备19170042号</span>
+      <span class="sep">|</span>
+      <span>网站标识码:5300000047</span>
+      <span class="sep">|</span>
+      <span>公安备案号:53030202000128号</span>
+    </div>
+    <div class="footer-copyright">© 2019-2026 东川市水利局 版权所有 未经许可不得复制或镜像</div>
   </div>
 </footer>
 
-<!-- 电话弹窗 -->
 <div class="phone-overlay" id="phoneOverlay">
   <div class="phone-modal">
     <div class="phone-status" id="phoneCalling">正在呼叫<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
@@ -143,7 +650,6 @@
   </div>
 </div>
 
-<!-- 邮件弹窗 -->
 <div class="email-overlay" id="emailOverlay">
   <div class="email-modal">
     <div class="email-header">
@@ -173,6 +679,74 @@
   </div>
 </div>
 
+<!-- 水管音效按钮已移除（玩家反馈不需要·2026.08） -->
+
 <script src="/js/main.js"></script>
+<script>
+var carouselIndex = 0;
+var carouselTimer = null;
+var slides = document.querySelectorAll('#carousel .carousel-slide');
+var dots = document.querySelectorAll('#carousel .carousel-dots span');
+
+function carouselShow(idx) {
+  slides.forEach(function(s, i) {
+    s.style.display = (i === idx) ? 'block' : 'none';
+  });
+  dots.forEach(function(d, i) {
+    d.className = (i === idx) ? 'active' : '';
+  });
+  carouselIndex = idx;
+}
+
+function carouselMove(dir) {
+  var next = (carouselIndex + dir + slides.length) % slides.length;
+  carouselShow(next);
+  resetCarouselTimer();
+}
+
+function carouselGo(idx) {
+  carouselShow(idx);
+  resetCarouselTimer();
+}
+
+function resetCarouselTimer() {
+  if (carouselTimer) clearInterval(carouselTimer);
+  carouselTimer = setInterval(function() { carouselMove(1); }, 5000);
+}
+
+if (slides.length > 0) {
+  resetCarouselTimer();
+}
+
+var anomalyRow = document.querySelector('table.water-table tbody tr:nth-child(3)');
+if (anomalyRow) {
+  anomalyRow.classList.add('anomaly-row');
+  anomalyRow.addEventListener('click', function() {
+    if (typeof reportClue === 'function') {
+      reportClue('wuxing_0743');
+    }
+    window.location.href = '/water-data.html';
+  });
+}
+
+/* 水管音效代码已移除（玩家反馈不需要·2026.08） */
+
+function toggleNav() {
+  var nav = document.querySelector('.nav-inner');
+  if (nav) nav.classList.toggle('active');
+}
+
+document.querySelectorAll('.nav-inner > li').forEach(function(li) {
+  li.addEventListener('click', function(e) {
+    if (window.innerWidth <= 768) {
+      var sub = li.querySelector('.submenu');
+      if (sub) {
+        e.preventDefault();
+        li.classList.toggle('open');
+      }
+    }
+  });
+});
+</script>
 </body>
 </html>

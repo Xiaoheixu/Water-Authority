@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>内设科室 - 东川市水利局</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+.office-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  padding: 20px 24px;
+  margin-bottom: 18px;
+  border-left: 4px solid #1f4e79;
+  transition: all 0.2s;
+}
+.office-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+.office-card h3 {
+  font-size: 18px;
+  color: #1f4e79;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed #e0e0e0;
+  font-weight: bold;
+}
+.office-card .office-row {
+  padding: 6px 0;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.office-card .office-label {
+  display: inline-block;
+  width: 90px;
+  color: #666;
+  font-weight: bold;
+}
+.office-card .office-note {
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: #f7f9fb;
+  border-left: 3px solid #c8161d;
+  font-size: 13px;
+  color: #555;
+  border-radius: 0 3px 3px 0;
+}
+.shoufa-link {
+  color: #c8161d;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 13px;
+}
+.shoufa-link:hover { color: #a81218; }
+.zhou-photo-link {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 3px 10px;
+  background: linear-gradient(180deg, #f7f9fb 0%, #eef5fb 100%);
+  border: 1px solid #d9e6f2;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #1f4e79;
+  cursor: pointer;
+}
+.zhou-photo-link:hover { background: #fef5f5; border-color: #f5c2c4; color: #c8161d; }
+.call-btn {
+  color: #c8161d;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: bold;
+}
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 9998;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.modal-overlay.active { display: flex; }
+.modal-box {
+  background: #fff;
+  border-radius: 6px;
+  max-width: 560px;
+  width: 100%;
+  max-height: 86vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 60px rgba(0,0,0,0.5);
+}
+.modal-header {
+  background: linear-gradient(180deg, #286090 0%, #1f4e79 100%);
+  color: #fff;
+  padding: 14px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #c8161d;
+}
+.modal-header h3 {
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin: 0;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}
+.modal-body {
+  padding: 22px;
+}
+.shoufa-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.shoufa-table th {
+  background: #1f4e79;
+  color: #fff;
+  padding: 10px 8px;
+  border: 1px solid #1a4268;
+  text-align: center;
+}
+.shoufa-table td {
+  padding: 9px 8px;
+  border: 1px solid #e0e0e0;
+  text-align: center;
+  background: #fff;
+}
+.shoufa-table tr:nth-child(even) td { background: #f7fafd; }
+.shoufa-clickable {
+  cursor: pointer;
+  color: #1f4e79;
+  text-decoration: underline;
+}
+.shoufa-clickable:hover { color: #c8161d; }
+.signature-sun {
+  font-family: "STXingkai", "华文行楷", "KaiTi", "楷体", cursive;
+  font-style: italic;
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  font-size: 16px;
+  color: #333;
+}
+.receipt-card {
+  background: #fffdf5;
+  border: 1px dashed #c9a227;
+  padding: 18px 22px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+}
+.receipt-header {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #8b6914;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px double #c9a227;
+}
+.receipt-row {
+  display: flex;
+  padding: 5px 0;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.receipt-label {
+  width: 110px;
+  color: #666;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+.receipt-sign {
+  margin-top: 16px;
+  text-align: right;
+  padding-top: 12px;
+  border-top: 1px dashed #e0e0e0;
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-inner">
+    <span>欢迎访问东川市人民政府门户网站</span>
+    <span class="top-date" id="topDate"></span>
+    <div class="top-links">
+      <a href="#">无障碍浏览</a>|
+      <a href="#">长者版</a>|
+      <a href="#">English</a>|
+      <a href="#" class="oa-login">OA登录</a>|
+      <a href="#">注册</a>
+    </div>
+  </div>
+</div>
+
+<div class="site-header">
+  <div class="header-inner">
+    <div class="header-logo"><img src="/images/logo.svg" alt="东川市水利局标志"></div>
+    <div class="header-titles">
+      <h1>东川市水利局</h1>
+      <div class="subtitle-en">DONGCHUAN WATER AUTHORITY</div>
+    </div>
+    <div class="header-right">
+      <div class="header-search">
+        <input type="text" placeholder="请输入搜索关键词">
+        <button>搜索</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main-nav">
+  <div class="nav-toggle" onclick="toggleNav()">☰ 菜单</div>
+  <ul class="nav-inner">
+    <li><a href="/index.html">网站首页</a></li>
+    <li><a href="#">资讯中心</a>
+      <ul class="submenu">
+        <li><a href="/news.html">工作动态</a></li>
+        <li><a href="/notice.html">通知公告</a></li>
+        <li><a href="#">水利要闻</a></li>
+        <li><a href="#">基层水事</a></li>
+        <li><a href="#">媒体聚焦</a></li>
+      </ul>
+    </li>
+    <li><a href="#">政府信息公开</a>
+      <ul class="submenu">
+        <li><a href="#">公开指南</a></li>
+        <li><a href="#">公开制度</a></li>
+        <li><a href="#">公开年报</a></li>
+        <li><a href="#">组织机构</a>
+          <ul class="submenu-l2">
+            <li><a href="#">机构职能</a></li>
+            <li><a href="/about-leaders.html">领导介绍</a></li>
+            <li><a href="/about-offices.html">内设科室</a></li>
+            <li><a href="#">直属单位</a></li>
+          </ul>
+        </li>
+        <li><a href="#">政策文件</a></li>
+        <li><a href="/planning.html">规划计划</a></li>
+        <li><a href="#">统计信息</a>
+          <ul class="submenu-l2">
+            <li><a href="#">水资源公报</a></li>
+            <li><a href="#">水质公报</a></li>
+            <li><a href="/water-data.html">水文监测</a></li>
+          </ul>
+        </li>
+        <li><a href="#">人事信息</a>
+          <ul class="submenu-l2">
+            <li><a href="#">人事任免</a></li>
+            <li><a href="#">招考录用</a></li>
+            <li><a href="/hr-obituary.html">讣告</a></li>
+          </ul>
+        </li>
+        <li><a href="#">财政信息</a>
+          <ul class="submenu-l2">
+            <li><a href="/finance.html">部门预算</a></li>
+            <li><a href="#">部门决算</a></li>
+            <li><a href="#">三公经费</a></li>
+          </ul>
+        </li>
+        <li><a href="/apply-public.html">依申请公开</a></li>
+      </ul>
+    </li>
+    <li><a href="#">政务服务</a>
+      <ul class="submenu">
+        <li><a href="/service.html">办事指南</a></li>
+        <li><a href="#">在线办理</a></li>
+        <li><a href="#">结果公示</a></li>
+        <li><a href="#">权责清单</a></li>
+      </ul>
+    </li>
+    <li><a href="#">互动交流</a>
+      <ul class="submenu">
+        <li><a href="/letter.html">领导信箱</a></li>
+        <li><a href="/liuyan.html">网上留言</a></li>
+        <li><a href="#">民意征集</a></li>
+        <li><a href="#">在线访谈</a></li>
+        <li><a href="#">网上信访</a></li>
+      </ul>
+    </li>
+    <li><a href="#">专题专栏</a>
+      <ul class="submenu">
+        <li><a href="/hechangzhi.html">河长制湖长制</a></li>
+        <li><a href="/dangjian.html">党建工作</a></li>
+        <li><a href="#">安全生产</a></li>
+        <li><a href="#">节水宣传</a></li>
+        <li><a href="/news-reservoir.html">水库建设专栏</a></li>
+      </ul>
+    </li>
+    <li><a href="/sitemap.html">网站导航</a></li>
+  </ul>
+</div>
+
+<div class="breadcrumb-bar">
+  <div class="wrap1200">当前位置: <a href="/index.html">首页</a> &gt; <a href="#">政府信息公开</a> &gt; <a href="#">组织机构</a> &gt; <span class="current">内设科室</span></div>
+</div>
+
+<div class="article-wrap wrap1200">
+  <aside class="side-nav">
+    <div class="side-title">组织机构</div>
+    <ul>
+      <li><a href="#">机构职能</a></li>
+      <li><a href="/about-leaders.html">领导介绍</a></li>
+      <li class="active"><a href="/about-offices.html">内设科室</a></li>
+      <li><a href="#">直属单位</a></li>
+    </ul>
+  </aside>
+
+  <main class="article-content">
+    <h2 class="art-title">内设科室</h2>
+    <p class="art-meta">发布时间:2026-01-20 &nbsp;&nbsp; 来源:局办公室 &nbsp;&nbsp; 浏览量:<span id="pv">15,823</span></p>
+
+    <div class="office-card">
+      <h3>1. 办公室（加挂信息中心、档案室牌子）</h3>
+      <div class="office-row"><span class="office-label">科室职能:</span>综合协调机关日常工作；负责文秘、信息、政务公开、档案、收发、OA系统管理、会务接待、后勤保障等工作。</div>
+      <div class="office-row"><span class="office-label">负责人:</span>王建国 主任（兼）</div>
+      <div class="office-row"><span class="office-label">联系电话:</span>0587-62190014 &nbsp; 内线 114</div>
+      <div class="office-row"><span class="office-label">办公地点:</span>局机关办公楼 三楼 302室</div>
+      <div class="office-note">
+        <div style="margin-bottom:6px;">📮 收发室值班：刘淑芬阿姨 &nbsp; 内线 107 &nbsp;&nbsp; <span class="shoufa-link" onclick="showShoufaModal()">收发室登记查询>></span></div>
+        <div style="margin-top:8px; padding-top:8px; border-top:1px dashed #ddd;">📁 档案室备注：专职管理员空缺。2024年6月8日陈素芬同志辞职后，档案工作暂由办公室代管。</div>
+      </div>
+    </div>
+
+    <div class="office-card">
+      <h3>2. 工程技术科（规划计划科）<span class="zhou-photo-link" onclick="window.location.href='/images/zhou-haisheng.jpg'">🌼 缅怀周工</span></h3>
+      <div class="office-row"><span class="office-label">科室职能:</span>负责水利工程规划、建设管理、质量审查、项目报批、技术指导等工作；承担水利发展规划编制和年度计划安排。</div>
+      <div class="office-row"><span class="office-label">负责人:</span>方小满 副科长（主持工作）。原副科长周海生同志2024年2月殉职。</div>
+      <div class="office-row"><span class="office-label">联系电话:</span>0587-62190018 &nbsp; 内线 118</div>
+      <div class="office-row"><span class="office-label">办公地点:</span>局机关办公楼 四楼 405室</div>
+    </div>
+
+    <div class="office-card">
+      <h3>3. 财务科</h3>
+      <div class="office-row"><span class="office-label">科室职能:</span>负责部门预决算编制、水利资金管理、内部审计、财务报销、资产管理等工作。</div>
+      <div class="office-row"><span class="office-label">负责人:</span>张惠琴 科长</div>
+      <div class="office-row"><span class="office-label">联系电话:</span>0587-62190022 &nbsp; 内线 122</div>
+      <div class="office-row"><span class="office-label">办公地点:</span>局机关办公楼 二楼 208室</div>
+      <div class="office-note">
+        线索提示：预算决算由张惠琴同志专人负责，历年审计结果均为合格。
+      </div>
+    </div>
+
+    <div class="office-card">
+      <h3>4. 安保科（信访办公室）</h3>
+      <div class="office-row"><span class="office-label">科室职能:</span>负责机关安全保卫、信访接待、水库巡查应急、安全生产监督、综治维稳等工作。</div>
+      <div class="office-row"><span class="office-label">负责人:</span>孙卫国 科长</div>
+      <div class="office-row"><span class="office-label">联系电话:</span>0587-62190026 &nbsp; <a class="call-btn" onclick="callPhone('0587-62190026','孙卫国 科长')">立即拨打</a></div>
+      <div class="office-row"><span class="office-label">办公地点:</span>局机关办公楼 一楼 105室</div>
+      <div class="office-note">
+        孙卫国同志曾获2019年度平安水利建设先进个人，连续多年优秀公务员。
+      </div>
+    </div>
+
+    <div class="office-card">
+      <h3>5. 人事科</h3>
+      <div class="office-row"><span class="office-label">科室职能:</span>负责干部任免、机构编制、劳资管理、教育培训、离退休人员服务等工作。</div>
+      <div class="office-row"><span class="office-label">负责人:</span>李琴 科长</div>
+      <div class="office-row"><span class="office-label">联系电话:</span>0587-62190028 &nbsp; 内线 128</div>
+      <div class="office-row"><span class="office-label">办公地点:</span>局机关办公楼 三楼 308室</div>
+    </div>
+
+    <div class="office-card">
+      <h3>6. 水文监测科</h3>
+      <div class="office-row"><span class="office-label">科室职能:</span>负责水文监测站网运行、水文数据采集整理、水质监测分析、水情预报预警等工作。</div>
+      <div class="office-row"><span class="office-label">负责人:</span>方小满 科长（兼）</div>
+      <div class="office-row"><span class="office-label">联系电话:</span>0587-62190432 &nbsp; <a class="call-btn" onclick="callPhone('0587-62190432','方小满 科长')">立即拨打</a></div>
+      <div class="office-row"><span class="office-label">办公地点:</span>局机关办公楼 五楼 502室</div>
+    </div>
+
+    <div class="office-card">
+      <h3>7. 政策法规科（水政监察科）</h3>
+      <div class="office-row"><span class="office-label">科室职能:</span>负责水利政策法规宣传、水行政执法、行政审批、水政监察、行政复议应诉等工作。</div>
+      <div class="office-row"><span class="office-label">负责人:</span>黄志刚 科长</div>
+      <div class="office-row"><span class="office-label">联系电话:</span>0587-62190035 &nbsp; 内线 135</div>
+      <div class="office-row"><span class="office-label">办公地点:</span>局机关办公楼 四楼 408室</div>
+    </div>
+
+    <div class="office-card">
+      <h3>8. 直属单位</h3>
+      <table class="gk-table">
+        <thead>
+          <tr>
+            <th style="width:60px;">序号</th>
+            <th>单位名称</th>
+            <th style="width:120px;">负责人</th>
+            <th style="width:160px;">联系电话</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gk-index">1</td>
+            <td><strong>东川水库管理处</strong></td>
+            <td>马德胜 处长</td>
+            <td>0587-62190301</td>
+            <td>负责东川水库日常运行管理、大坝安全监测、库区维护</td>
+          </tr>
+          <tr>
+            <td class="gk-index">2</td>
+            <td><strong>水政监察支队</strong></td>
+            <td>宋铁军 支队长</td>
+            <td>0587-62190318</td>
+            <td>受委托行使水行政处罚权，负责河道巡查、采砂执法</td>
+          </tr>
+          <tr>
+            <td class="gk-index">3</td>
+            <td><strong>青溪供水站</strong></td>
+            <td>魏良才 站长</td>
+            <td>0587-62190355</td>
+            <td>提示：青溪村供水由本站负责</td>
+          </tr>
+          <tr>
+            <td class="gk-index">4</td>
+            <td><strong>水利水电勘测设计队</strong></td>
+            <td>胡建明 队长</td>
+            <td>0587-62190372</td>
+            <td>承担中小型水利工程勘测、设计、技术咨询工作</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<div id="shoufaModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>收发室 2024年2月登记表（部分）</h3>
+      <button class="modal-close" onclick="closeShoufaModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <table class="shoufa-table">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>收件日期</th>
+            <th>邮件类型</th>
+            <th>邮件号码</th>
+            <th>寄件人</th>
+            <th>取件人</th>
+            <th>取件签字</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>001</td><td>2024-02-12 09:22</td><td>普通包裹</td><td>PA20240211053</td><td>东川市新华书店</td><td>张惠琴</td><td>张惠琴</td>
+          </tr>
+          <tr>
+            <td>002</td><td>2024-02-13 16:45</td><td>EMS快递</td><td>EF20240213041</td><td>云南省水利厅</td><td>王建国</td><td>王建国</td>
+          </tr>
+          <tr class="shoufa-clickable" onclick="reportClue('shoufa_record');reportClue('sun_quxin');" title="点击查看详情">
+            <td style="color:#c8161d;font-weight:bold;">003</td>
+            <td style="color:#c8161d;font-weight:bold;">2024-02-14 03:17</td>
+            <td style="color:#c8161d;font-weight:bold;">挂号信</td>
+            <td style="color:#c8161d;font-weight:bold;">XA20240213079</td>
+            <td style="color:#c8161d;font-weight:bold;">周海生</td>
+            <td style="color:#c8161d;font-weight:bold;">孙卫国</td>
+            <td class="signature-sun">孙卫国</td>
+          </tr>
+          <tr>
+            <td>004</td><td>2024-02-14 09:30</td><td>平信</td><td>—</td><td>市财政局</td><td>张惠琴</td><td>张惠琴</td>
+          </tr>
+          <tr>
+            <td>005</td><td>2024-02-15 11:08</td><td>挂号信</td><td>XA20240214088</td><td>青溪村委会</td><td>孙卫国</td><td class="signature-sun">孙卫国</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:16px; padding:10px 14px; background:#fef7f7; border-left:3px solid #c8161d; font-size:13px; color:#666;">
+        💡 提示：点击编号003行可查看线索详情。
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>主办单位:东川市水利局 &nbsp;|&nbsp; 地址:云南省曲靖市东川市青溪路197号 &nbsp;|&nbsp; 邮编:654200</p>
+    <p>联系电话:0587-62190001 &nbsp;|&nbsp; 传真:0587-62190002 &nbsp;|&nbsp; 邮箱:slj@dongchuan.gov.cn</p>
+    <p>网站标识码:53038100047 &nbsp;|&nbsp; 备案号:东ICP备19170042号 &nbsp;|&nbsp; 公安备案:53038102000014号</p>
+    <p class="copy">&copy; 2019-2026 东川市水利局 版权所有 &nbsp; 未经许可不得复制或镜像</p>
+  </div>
+</footer>
+
+<!-- 水管音效按钮已移除（玩家反馈不需要·2026.08） -->
+<script src="/js/main.js"></script>
+<script>
+document.getElementById('topDate').textContent = new Date().toLocaleDateString('zh-CN', { year:'numeric', month:'long', day:'numeric', weekday:'long' });
+function showShoufaModal() {
+  document.getElementById('shoufaModal').classList.add('active');
+}
+function closeShoufaModal() {
+  document.getElementById('shoufaModal').classList.remove('active');
+}
+document.getElementById('shoufaModal').addEventListener('click', function(e) {
+  if (e.target === this) closeShoufaModal();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" aria-label="东川市水利局标志">
+  <defs>
+    <radialGradient id="dc-bg-grad" cx="50%" cy="48%" r="54%">
+      <stop offset="0%" stop-color="#2e66a0"/>
+      <stop offset="100%" stop-color="#163b5c"/>
+    </radialGradient>
+    <linearGradient id="dc-gold-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8c165"/>
+      <stop offset="100%" stop-color="#b28a2e"/>
+    </linearGradient>
+    <path id="dc-arc-text" d="M 70 372 A 146 146 0 0 1 330 372" fill="none"/>
+  </defs>
+
+  <!-- 外圈红色描边（与现有站点header边框色呼应 #c8161d） -->
+  <circle cx="200" cy="200" r="194" fill="none" stroke="#c8161d" stroke-width="4"/>
+
+  <!-- 主圆深蓝底（径向渐变：中心亮，边缘深，立体感） -->
+  <circle cx="200" cy="200" r="186" fill="url(#dc-bg-grad)"/>
+
+  <!-- 内圈装饰金线：双环 -->
+  <circle cx="200" cy="200" r="172" fill="none" stroke="url(#dc-gold-grad)" stroke-width="1.6"/>
+  <circle cx="200" cy="200" r="158" fill="none" stroke="rgba(212,168,75,0.45)" stroke-width="1"/>
+
+  <!-- 顶部红色五角星（机关徽章标准元素） -->
+  <g transform="translate(200 78)">
+    <polygon points="0,-26 7.6,-8 26.5,-8 11,3.6 17,22.2 0,11 -17,22.2 -11,3.6 -26.5,-8 -7.6,-8"
+             fill="#c8161d" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
+  </g>
+
+  <!-- 中心主视觉：金文（大篆·散氏盘风格）「水」字——纯矢量象形绘制，中间主流+左右四组支流水滴 -->
+  <g transform="translate(200 215)" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 主流：蜿蜒向下的主干（金文水中间主曲笔） -->
+    <path d="M 0 -72
+             C -8 -58, -10 -48, -4 -34
+             C 2 -20, 6 -10, -2 4
+             C -10 18, -14 30, -4 44
+             C 6 58, 10 66, 0 76"
+          fill="none" stroke="#ffffff" stroke-width="12"/>
+    <!-- 左上支流 -->
+    <path d="M -22 -40 C -38 -34, -48 -22, -40 -8"
+          fill="none" stroke="#ffffff" stroke-width="10"/>
+    <!-- 左中水滴 -->
+    <path d="M -30 6 C -42 14, -46 26, -34 36"
+          fill="none" stroke="#ffffff" stroke-width="10"/>
+    <!-- 左下分流 -->
+    <path d="M -18 56 C -34 62, -44 72, -36 88"
+          fill="none" stroke="#ffffff" stroke-width="10"/>
+    <!-- 右上支流 -->
+    <path d="M 22 -46 C 40 -40, 52 -28, 44 -12"
+          fill="none" stroke="#ffffff" stroke-width="10"/>
+    <!-- 右中水滴 -->
+    <path d="M 34 -2 C 46 8, 50 20, 38 32"
+          fill="none" stroke="#ffffff" stroke-width="10"/>
+    <!-- 右下分流 -->
+    <path d="M 20 54 C 38 60, 48 72, 40 90"
+          fill="none" stroke="#ffffff" stroke-width="10"/>
+    <!-- 金文水整体加一层极细金边，呼应坝基色调（不抢眼） -->
+    <path d="M 0 -72 C -8 -58, -10 -48, -4 -34 C 2 -20, 6 -10, -2 4 C -10 18, -14 30, -4 44 C 6 58, 10 66, 0 76
+             M -22 -40 C -38 -34, -48 -22, -40 -8
+             M -30 6 C -42 14, -46 26, -34 36
+             M -18 56 C -34 62, -44 72, -36 88
+             M 22 -46 C 40 -40, 52 -28, 44 -12
+             M 34 -2 C 46 8, 50 20, 38 32
+             M 20 54 C 38 60, 48 72, 40 90"
+          fill="none" stroke="rgba(212,168,75,0.55)" stroke-width="1"/>
+  </g>
+
+  <!-- 三条抽象水波纹（从浅→深→浅，表现水面层次） -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M120 288 Q150 276 180 288 T240 288 T300 288"
+          stroke="rgba(255,255,255,0.78)" stroke-width="4"/>
+    <path d="M108 308 Q142 294 172 308 T236 308 T300 308"
+          stroke="rgba(255,255,255,0.6)" stroke-width="4"/>
+    <path d="M120 328 Q154 314 188 328 T256 328 T312 328"
+          stroke="rgba(255,255,255,0.42)" stroke-width="4"/>
+  </g>
+
+  <!-- 底部抽象坝基剪影（金黄半透明：象征水利工程主体） -->
+  <path d="M58 360 L342 360 L310 340 L90 340 Z"
+        fill="rgba(212,168,75,0.58)" stroke="rgba(166,127,45,0.55)" stroke-width="1"/>
+
+  <!-- 坝基金色横带上·居中金色宋体「东川水利局」（用户截图位置·政府机关徽章底座标准排版） -->
+  <text x="200" y="352" text-anchor="middle"
+        font-family="'SimSun', '宋体', 'STSong', 'Times New Roman', serif"
+        font-size="28" font-weight="900" letter-spacing="8"
+        fill="url(#dc-gold-grad)"
+        stroke="rgba(10,30,52,0.75)" stroke-width="0.9">东川水利局</text>
+
+  <!-- 底部弧形英文站名：DONGCHUAN WATER BUREAU -->
+  <text font-family="Georgia,'Times New Roman',serif"
+        font-size="18" letter-spacing="5" fill="rgba(255,255,255,0.92)">
+    <textPath href="#dc-arc-text" startOffset="50%" text-anchor="middle">
+      DONGCHUAN · WATER · BUREAU
+    </textPath>
+  </text>
+</svg>

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人物关系与时间线 · 内部资料 - 东川市水利局</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  body { background: #f4f6f8; }
+  .secret-watermark {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; opacity: 0.035;
+    font-size: 120px; color: #1a5276; font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+    transform: rotate(-30deg); letter-spacing: 40px;
+  }
+  .main-wrap { position: relative; z-index: 1; }
+  .confidential-badge {
+    display: inline-block; background: #c0392b; color: #fff;
+    padding: 3px 12px; border-radius: 3px; font-size: 12px;
+    margin-left: 10px; vertical-align: middle; letter-spacing: 1px;
+  }
+  .section-box {
+    background: #fff; border: 1px solid #dde4ec; border-radius: 4px;
+    padding: 22px 26px; margin-bottom: 22px;
+    box-shadow: 0 2px 8px rgba(26,82,118,0.05);
+  }
+  .section-box h3 {
+    color: #1a5276; font-size: 18px; margin: 0 0 16px;
+    padding-bottom: 10px; border-bottom: 2px solid #2980b9;
+  }
+  .player-card {
+    background: linear-gradient(135deg, #1a5276 0%, #2c3e50 100%);
+    color: #fff; padding: 20px 24px; border-radius: 6px;
+    margin-bottom: 18px;
+  }
+  .player-card h4 { margin: 0 0 10px; font-size: 17px; color: #f1c40f; }
+  .player-card p { margin: 6px 0; line-height: 1.8; font-size: 14px; }
+  .player-card .kv { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; }
+  .player-card .kv div { flex: 1 1 200px; background: rgba(255,255,255,0.08); padding: 8px 12px; border-radius: 4px; }
+  .player-card .kv span { color: #85c1e9; font-size: 12px; display: block; margin-bottom: 3px; }
+  .rel-svg-wrap { width: 100%; overflow-x: auto; padding: 10px 0; }
+  .rel-svg-wrap svg { min-width: 820px; width: 100%; height: auto; display: block; }
+  .legend { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: #555; }
+  .legend i { display:inline-block; width:32px; height:3px; vertical-align:middle; margin-right:6px; border-radius:2px; }
+  .timeline-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 768px) {
+    .timeline-compare { grid-template-columns: 1fr; }
+    .section-box { padding: 14px 16px; }
+  }
+  .timeline-col { background: #f8fafc; border-radius: 5px; padding: 16px 18px; border-top: 4px solid #aaa; }
+  .timeline-col.official { border-top-color: #2980b9; }
+  .timeline-col.real { border-top-color: #c0392b; }
+  .timeline-col h4 { margin: 0 0 14px; font-size: 15px; }
+  .timeline-col.official h4 { color: #2980b9; }
+  .timeline-col.real h4 { color: #c0392b; }
+  .tl-item { padding: 10px 0 10px 16px; border-left: 2px solid #ccc; margin-left: 4px; position: relative; transition: opacity 0.3s; }
+  .timeline-col.official .tl-item { border-left-color: #aed6f1; }
+  .timeline-col.real .tl-item { border-left-color: #f5b7b1; }
+  .tl-item::before {
+    content: ''; position: absolute; left: -7px; top: 14px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #ccc;
+  }
+  .timeline-col.official .tl-item::before { background: #2980b9; }
+  .timeline-col.real .tl-item::before { background: #c0392b; }
+  .tl-date { font-size: 12px; color: #888; margin-bottom: 4px; }
+  .tl-text { font-size: 13.5px; color: #333; line-height: 1.7; }
+
+  /* ==== 锁定态样式 ==== */
+  .locked-node rect, .locked-node circle {
+    fill: #e5e7eb !important;
+    stroke: #9ca3af !important;
+  }
+  .locked-node text { fill: #9ca3af !important; }
+  .locked-line line {
+    stroke: #d1d5db !important;
+    stroke-dasharray: 3 5 !important;
+  }
+  .locked-line text {
+    fill: #9ca3af !important;
+    font-style: italic;
+  }
+  .locked-tl { color: #999 !important; font-style: italic; }
+  .locked-tl .tl-date { color: #bbb !important; }
+  .locked-tl .tl-text { color: transparent !important; position: relative; }
+  .locked-tl .tl-text::after {
+    content: '🔒 （尚未解锁·继续收集线索···）';
+    color: #aab !important;
+    font-style: italic;
+    position: absolute; left: 0; top: 0;
+  }
+  .content-placeholder {
+    display: block;
+  }
+  .content-real {
+    display: none;
+  }
+  .kv-real-content {
+    display: none;
+  }
+  .need-clue-box .clue-real-content { display: none; }
+  .need-clue-box.unlocked .clue-real-content { display: block; }
+  .need-clue-box .clue-hidden { display: block; color: #94a3b8; font-style: italic; }
+  .need-clue-box.unlocked .clue-hidden { display: none; }
+
+  .verify-block {
+    background: #fef9e7; border-left: 4px solid #f39c12;
+    padding: 14px 18px; margin-top: 18px; border-radius: 3px;
+    font-size: 13.5px; line-height: 1.8; color: #7d6608;
+  }
+  .verify-block b { color: #c0392b; }
+  .relation-legend-box {
+    margin-top: 14px; background: #f8fafc; padding: 12px 16px;
+    border-radius: 4px; font-size: 13px; color: #444; line-height: 2;
+  }
+  .unlock-tip-box {
+    background: #eff6ff; border-left: 4px solid #3b82f6;
+    padding: 12px 16px; border-radius: 3px; margin-top: 12px;
+    font-size: 13px; color: #1e40af; line-height: 1.8;
+  }
+  .unlock-tip-box code {
+    background: #dbeafe; padding: 1px 6px; border-radius: 3px;
+    font-size: 12px; color: #1d4ed8;
+  }
+</style>
+</head>
+<body>
+
+<div class="secret-watermark">机密·内部调查</div>
+
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <span id="welcome-trigger" title="点击查看案件档案进度" style="cursor:pointer;user-select:none;border-bottom:1px dotted rgba(26,82,118,0.3);">欢迎访问东川市水利局官方网站</span>
+    <span><a href="#">无障碍浏览</a> | <a href="#">English</a> | <a href="/sitemap.html">网站地图</a></span>
+  </div>
+</div>
+
+<div class="site-header">
+  <div class="header-inner">
+    <div class="header-logo"><img src="/images/logo.svg" alt="东川市水利局标志"></div>
+    <div class="header-title">
+      <h1>东川市水利局</h1>
+      <div class="subtitle">DONGCHUAN MUNICIPAL WATER AUTHORITY</div>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <button class="nav-toggle" onclick="toggleNav()" aria-label="菜单">☰ 菜单</button>
+  <ul class="nav-inner">
+    <li><a href="/index.html">首页</a></li>
+    <li><a href="/about.html">组织机构</a></li>
+    <li><a href="/news.html">新闻动态</a></li>
+    <li><a href="/notice.html">通知公告</a></li>
+    <li><a href="/water-data.html">水文监测</a></li>
+    <li><a href="/contact.html">联系我们</a></li>
+  </ul>
+</nav>
+
+<div class="main-wrap">
+  <div class="content-main">
+    <div class="breadcrumb">
+      <a href="/index.html">首页</a> &gt; 机构内部 &gt;
+      <span style="color:#c0392b;">人物关系与时间线（内部资料·勿外传）</span>
+      <span class="confidential-badge">机密 · CONFIDENTIAL</span>
+    </div>
+
+    <h2 class="page-title">人物关系与时间线对照 <small style="font-size:13px;color:#888;font-weight:400;">（林屿同志个人工作记录·不代表单位立场）</small></h2>
+
+    <!-- ======= 玩家身份卡片 ======= -->
+    <div class="section-box">
+      <h3>0 · 你是谁 · 调查员身份卡</h3>
+      <div class="player-card">
+        <h4>林屿 | 东川市水利局 · 档案室 / 工程科科员（双岗）</h4>
+        <p>工号：DC-202608-17 &nbsp;|&nbsp; 入职日期：2026年8月16日 &nbsp;|&nbsp; 学历：东川学院档案学 2022届本科</p>
+        <div class="kv">
+          <div data-need="s01_welcome_identity">
+            <span>当前工位</span>
+            <span class="kv-real-content"></span>
+            <span class="content-placeholder">（收集线索第1步解锁）</span>
+          </div>
+          <div data-need="s02_fangxiao_message">
+            <span>你为什么来</span>
+            <span class="kv-real-content"></span>
+            <span class="content-placeholder">（收集线索第2步解锁）</span>
+          </div>
+          <div data-need="s19_relative_zhou_fang">
+            <span>你和周方两家</span>
+            <span class="kv-real-content"></span>
+            <span class="content-placeholder">（收集线索第19步解锁）</span>
+          </div>
+          <div data-need="s18_oa_login_success">
+            <span>今日任务</span>
+            <span class="kv-real-content"></span>
+            <span class="content-placeholder">（OA登录成功后解锁）</span>
+          </div>
+        </div>
+      </div>
+      <div class="verify-block">
+        <b>提醒：</b>本页所有内容由你本人逐笔记载，<b>不是单位官方文件</b>。人物和时间线按你收集到的线索逐条解锁，未解锁项显示「🔒 未解锁」。举报前请反复核对，避免红鲱鱼误导。
+      </div>
+      <div class="unlock-tip-box">
+        <b>解锁说明：</b>所有人物的真实姓名、关系、罪名、时间线事实均需通过对应线索解锁才会显示在本页。查看已收集的线索进度请点击顶部<b>「欢迎访问东川市水利局官方网站」</b>文字。
+      </div>
+    </div>
+
+    <!-- ======= 9人SVG关系图 ======= -->
+    <div class="section-box">
+      <h3>1 · 人物关系图谱（9人核心网络 · 逐步解锁）</h3>
+      <div class="rel-svg-wrap">
+        <!-- SVG里只有???占位和data-need属性，真实内容全部通过JS解锁后动态注入，源码无明文 -->
+        <svg viewBox="0 0 860 560" xmlns="http://www.w3.org/2000/svg" aria-label="人物关系图">
+          <defs>
+            <marker id="arrowGood" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#27ae60"/></marker>
+            <marker id="arrowBad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker>
+            <marker id="arrowGrey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7f8c8d"/></marker>
+            <linearGradient id="heroGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a5276"/><stop offset="100%" stop-color="#2980b9"/></linearGradient>
+            <linearGradient id="badGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#922b21"/><stop offset="100%" stop-color="#c0392b"/></linearGradient>
+            <linearGradient id="deadGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4a4a4a"/><stop offset="100%" stop-color="#2c2c2c"/></linearGradient>
+            <linearGradient id="greyGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#566573"/><stop offset="100%" stop-color="#7f8c8d"/></linearGradient>
+          </defs>
+
+          <!-- ============ 连线占位（真实文案动态注入） ============ -->
+          <!-- 林屿 ↔ 方晓 -->
+          <g class="rel-line" data-need="s02_fangxiao_message">
+            <line x1="110" y1="100" x2="280" y2="70" stroke="#2980b9" stroke-width="2.2" stroke-dasharray="6 4"/>
+            <text x="175" y="78" font-size="11" fill="#2980b9" class="line-label">???</text>
+          </g>
+          <!-- 林屿 → 周海生 -->
+          <g class="rel-line" data-need="s01_welcome_identity">
+            <line x1="110" y1="115" x2="280" y2="210" stroke="#27ae60" stroke-width="2.5" marker-end="url(#arrowGood)"/>
+            <text x="160" y="160" font-size="11" fill="#27ae60" class="line-label">???</text>
+          </g>
+          <!-- 周海生 ↔ 方学礼 -->
+          <g class="rel-line" data-need="s19_relative_zhou_fang">
+            <line x1="305" y1="225" x2="485" y2="85" stroke="#8e44ad" stroke-width="2.2"/>
+            <text x="370" y="140" font-size="11" fill="#8e44ad" class="line-label">???</text>
+          </g>
+          <!-- 周海生 → 周小雨 -->
+          <g class="rel-line" data-need="s04_zhouxiaoyu_scratch">
+            <line x1="300" y1="235" x2="140" y2="410" stroke="#2980b9" stroke-width="2.2" marker-end="url(#arrowGood)"/>
+            <text x="200" y="330" font-size="11" fill="#2980b9" class="line-label">???</text>
+          </g>
+          <!-- 方学礼 → 方晓 -->
+          <g class="rel-line" data-need="s15_seven_confirm">
+            <line x1="500" y1="105" x2="295" y2="85" stroke="#2980b9" stroke-width="2.2" marker-end="url(#arrowGood)"/>
+            <text x="410" y="82" font-size="11" fill="#2980b9" class="line-label">???</text>
+          </g>
+          <!-- 周海生 ← 陈素芬 -->
+          <g class="rel-line" data-need="s09_door_1379">
+            <line x1="300" y1="230" x2="480" y2="240" stroke="#e67e22" stroke-width="2.2" stroke-dasharray="3 3"/>
+            <text x="375" y="225" font-size="11" fill="#e67e22" class="line-label">???</text>
+          </g>
+          <!-- 周海生 ←→ 赵德明 -->
+          <g class="rel-line" data-need="s20_cdr_302_4m17s">
+            <line x1="310" y1="215" x2="630" y2="145" stroke="#c0392b" stroke-width="2.8" marker-end="url(#arrowBad)"/>
+            <text x="450" y="170" font-size="11" fill="#c0392b" font-weight="700" class="line-label">???</text>
+          </g>
+          <!-- 赵德明 ↔ 孙卫国 -->
+          <g class="rel-line" data-need="s20_cdr_302_4m17s">
+            <line x1="645" y1="160" x2="755" y2="310" stroke="#c0392b" stroke-width="2.8" stroke-dasharray="8 3"/>
+            <text x="685" y="235" font-size="11" fill="#c0392b" font-weight="700" class="line-label">???</text>
+          </g>
+          <!-- 孙卫国 → 周海生 -->
+          <g class="rel-line" data-need="s23_yansti_13_dna">
+            <line x1="735" y1="305" x2="325" y2="250" stroke="#922b21" stroke-width="3" marker-end="url(#arrowBad)"/>
+            <text x="505" y="290" font-size="11" fill="#922b21" font-weight="700" class="line-label">???</text>
+          </g>
+          <!-- 马建国 → 赵德明 -->
+          <g class="rel-line" data-need="s25_majianguo_not_present">
+            <line x1="635" y1="400" x2="650" y2="180" stroke="#7f8c8d" stroke-width="2.2" stroke-dasharray="5 3"/>
+            <text x="660" y="300" font-size="11" fill="#7f8c8d" class="line-label">???</text>
+          </g>
+          <!-- 孙卫国 → 赵铁柱 -->
+          <g class="rel-line" data-need="s11_zhao_tiezhu_7not8">
+            <line x1="760" y1="320" x2="610" y2="480" stroke="#e67e22" stroke-width="2" stroke-dasharray="4 3"/>
+            <text x="675" y="410" font-size="11" fill="#e67e22" class="line-label">???</text>
+          </g>
+
+          <!-- ============ 9人节点占位（真实姓名/信息通过JS解锁后注入，源码绝不泄露） ============ -->
+          <!-- 节点组统一格式：rect + text.placeholder(显示???) + text.real(解锁后显示真实内容) -->
+          <!-- 林屿 玩家 -->
+          <g class="rel-node" data-need="s01_welcome_identity">
+            <rect x="40" y="60" width="140" height="80" rx="6" fill="url(#heroGrad)" stroke="#1a5276" stroke-width="2"/>
+            <text x="110" y="88" text-anchor="middle" fill="#fff" font-size="15" font-weight="700" class="name-text">???</text>
+            <text x="110" y="108" text-anchor="middle" fill="#aed6f1" font-size="11" class="sub-text">???</text>
+            <text x="110" y="125" text-anchor="middle" fill="#f1c40f" font-size="11" class="tag-text">???</text>
+          </g>
+          <!-- 方晓 -->
+          <g class="rel-node" data-need="s02_fangxiao_message">
+            <rect x="210" y="30" width="140" height="76" rx="6" fill="#fff" stroke="#2980b9" stroke-width="2"/>
+            <text x="280" y="57" text-anchor="middle" fill="#1a5276" font-size="14" font-weight="700" class="name-text">???</text>
+            <text x="280" y="75" text-anchor="middle" fill="#555" font-size="11" class="sub-line1">???</text>
+            <text x="280" y="92" text-anchor="middle" fill="#555" font-size="11" class="sub-line2">???</text>
+          </g>
+          <!-- 方学礼 -->
+          <g class="rel-node" data-need="s15_seven_confirm">
+            <rect x="420" y="45" width="160" height="80" rx="6" fill="url(#deadGrad)" stroke="#2c2c2c" stroke-width="2"/>
+            <text x="500" y="73" text-anchor="middle" fill="#ecf0f1" font-size="14" font-weight="700" class="name-text">???</text>
+            <text x="500" y="91" text-anchor="middle" fill="#bdc3c7" font-size="11" class="sub-line1">???</text>
+            <text x="500" y="108" text-anchor="middle" fill="#e74c3c" font-size="11" class="sub-line2">???</text>
+          </g>
+          <!-- 周海生 -->
+          <g class="rel-node" data-need="s01_welcome_identity">
+            <rect x="230" y="185" width="150" height="90" rx="6" fill="url(#deadGrad)" stroke="#2c2c2c" stroke-width="2"/>
+            <text x="305" y="214" text-anchor="middle" fill="#ecf0f1" font-size="14" font-weight="700" class="name-text">???</text>
+            <text x="305" y="232" text-anchor="middle" fill="#bdc3c7" font-size="11" class="sub-line1">???</text>
+            <text x="305" y="250" text-anchor="middle" fill="#bdc3c7" font-size="11" class="sub-line2">???</text>
+            <text x="305" y="267" text-anchor="middle" fill="#e74c3c" font-size="11" class="sub-line3">???</text>
+          </g>
+          <!-- 陈素芬 -->
+          <g class="rel-node" data-need="s09_door_1379">
+            <rect x="450" y="200" width="140" height="80" rx="6" fill="#fff" stroke="#e67e22" stroke-width="2"/>
+            <text x="520" y="228" text-anchor="middle" fill="#a04000" font-size="14" font-weight="700" class="name-text">???</text>
+            <text x="520" y="246" text-anchor="middle" fill="#555" font-size="11" class="sub-line1">???</text>
+            <text x="520" y="263" text-anchor="middle" fill="#555" font-size="11" class="sub-line2">???</text>
+          </g>
+          <!-- 赵德明 -->
+          <g class="rel-node" data-need="s06_zhaodm_photoword">
+            <rect x="580" y="100" width="140" height="88" rx="6" fill="url(#badGrad)" stroke="#922b21" stroke-width="2"/>
+            <text x="650" y="129" text-anchor="middle" fill="#fff" font-size="15" font-weight="700" class="name-text">???</text>
+            <text x="650" y="147" text-anchor="middle" fill="#fadbd8" font-size="11" class="sub-line1">???</text>
+            <text x="650" y="165" text-anchor="middle" fill="#f1948a" font-size="11" class="sub-line2">???</text>
+            <text x="650" y="182" text-anchor="middle" fill="#f1948a" font-size="11" class="sub-line3">???</text>
+          </g>
+          <!-- 孙卫国 -->
+          <g class="rel-node" data-need="s05_sunweiguo_passby">
+            <rect x="680" y="275" width="140" height="88" rx="6" fill="url(#badGrad)" stroke="#922b21" stroke-width="2"/>
+            <text x="750" y="304" text-anchor="middle" fill="#fff" font-size="15" font-weight="700" class="name-text">???</text>
+            <text x="750" y="322" text-anchor="middle" fill="#fadbd8" font-size="11" class="sub-line1">???</text>
+            <text x="750" y="340" text-anchor="middle" fill="#f1948a" font-size="11" class="sub-line2">???</text>
+            <text x="750" y="357" text-anchor="middle" fill="#f1948a" font-size="11" class="sub-line3">???</text>
+          </g>
+          <!-- 马建国 -->
+          <g class="rel-node" data-need="s25_majianguo_not_present">
+            <rect x="550" y="365" width="160" height="80" rx="6" fill="url(#greyGrad)" stroke="#566573" stroke-width="2"/>
+            <text x="630" y="393" text-anchor="middle" fill="#fff" font-size="14" font-weight="700" class="name-text">???</text>
+            <text x="630" y="411" text-anchor="middle" fill="#d5dbdb" font-size="11" class="sub-line1">???</text>
+            <text x="630" y="428" text-anchor="middle" fill="#d5dbdb" font-size="11" class="sub-line2">???</text>
+          </g>
+          <!-- 周小雨 -->
+          <g class="rel-node" data-need="s04_zhouxiaoyu_scratch">
+            <rect x="60" y="380" width="160" height="80" rx="6" fill="#fff" stroke="#27ae60" stroke-width="2"/>
+            <text x="140" y="408" text-anchor="middle" fill="#1e8449" font-size="14" font-weight="700" class="name-text">???</text>
+            <text x="140" y="426" text-anchor="middle" fill="#555" font-size="11" class="sub-line1">???</text>
+            <text x="140" y="443" text-anchor="middle" fill="#555" font-size="11" class="sub-line2">???</text>
+          </g>
+          <!-- 赵铁柱/张建国 红鲱鱼 -->
+          <g class="rel-node" data-need="s11_zhao_tiezhu_7not8">
+            <rect x="520" y="465" width="170" height="80" rx="6" fill="#fff" stroke="#e67e22" stroke-width="2" stroke-dasharray="5 3"/>
+            <text x="605" y="493" text-anchor="middle" fill="#a04000" font-size="14" font-weight="700" class="name-text">???</text>
+            <text x="605" y="511" text-anchor="middle" fill="#555" font-size="11" class="sub-line1">???</text>
+            <text x="605" y="528" text-anchor="middle" fill="#555" font-size="11" class="sub-line2">???</text>
+          </g>
+        </svg>
+      </div>
+      <div class="legend">
+        <span><i style="background:#27ae60;"></i>调查/正义方</span>
+        <span><i style="background:#c0392b;"></i>命案关系（主谋/行凶/灭口）</span>
+        <span><i style="background:#7f8c8d;"></i>知情未报（灰区人物）</span>
+        <span><i style="background:#e67e22;"></i>证人/线索/红鲱鱼</span>
+        <span><i style="background:#2980b9;"></i>亲属/同学关系（虚线）</span>
+      </div>
+      <div class="relation-legend-box">
+        <div class="need-clue-box" data-need="s15_seven_confirm">
+          <div class="clue-real-content"></div>
+          <div class="clue-hidden">🔒 完成七人名单确认（线索第15步）解锁遇难者完整名单</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= 时间线红蓝对照（时间线条目的真实文本通过JS解锁后动态注入，源码不写入） ======= -->
+    <div class="section-box">
+      <h3>2 · 时间线对照 · 官方说法（蓝） vs 真实发生（红）</h3>
+      <div class="timeline-compare">
+        <div class="timeline-col official">
+          <h4>📘 官方叙事（对外公布 / 新闻通稿）</h4>
+          <!-- 所有tl-text的真实文字均为???，通过JS解锁后注入 -->
+          <div class="tl-item" data-need="s07_reservoir_photo_rightedge">
+            <div class="tl-date">2019.06.14 · 事故当日</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="s07_reservoir_photo_rightedge">
+            <div class="tl-date">2019.06.15 · 通水仪式</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="s24_80w_account_last8">
+            <div class="tl-date">2023.08.17 · 资金往来</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="s21_zhaodm_absent_email">
+            <div class="tl-date">2024.02.13 晚</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="s22_zhaodm_absent_schedule">
+            <div class="tl-date">2024.02.14 凌晨</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="s09_door_1379">
+            <div class="tl-date">2024.06 · 人员变动</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="s01_welcome_identity">
+            <div class="tl-date">2026.08 · 当前</div>
+            <div class="tl-text">???</div>
+          </div>
+        </div>
+
+        <div class="timeline-col real">
+          <h4>📕 真实叙事（你调查后还原 · 证据链佐证）</h4>
+          <div class="tl-item" data-need="s10_collapse_line_straight">
+            <div class="tl-date">2017.09 · 工程招标前</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="s28_chencf_id_19851024">
+            <div class="tl-date">2019.06.14 · 人为坍塌</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="s26_shoucai_2083">
+            <div class="tl-date">2019.06.14 23:47</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="s24_80w_account_last8">
+            <div class="tl-date">2023.08.17 · 资金流向</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="s20_cdr_302_4m17s">
+            <div class="tl-date">2024.02.13 23:02</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="s23_yansti_13_dna">
+            <div class="tl-date">2024.02.14 01:47</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="s22_zhaodm_absent_schedule">
+            <div class="tl-date">2024.02.14 凌晨</div>
+            <div class="tl-text">???</div>
+          </div>
+          <div class="tl-item" data-need="point_double_insurance">
+            <div class="tl-date">2026.08.16 · 今日</div>
+            <div class="tl-text">???</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="verify-block">
+        <div class="need-clue-box" data-need="s29_sony_pen_distinguish">
+          <div class="clue-real-content"></div>
+          <div class="clue-hidden">🔒 完成索尼录音笔区分（线索第29步）解锁S结局通关红线</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center; color:#888; font-size:12px; padding:20px 0 10px;">
+      —— 本页为林屿同志个人调查记录 · <a href="/index.html">返回首页</a> · 
+      档案袋进度同步已启用 · 每3秒自动与服务端score对齐 ——
+    </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="/about.html">关于我们</a> |
+      <a href="/contact.html">联系我们</a> |
+      <a href="/sitemap.html">网站地图</a>
+    </div>
+    <div>主办单位:东川市水利局 &nbsp; 地址:东川市清江路197号 &nbsp; 邮编:537000</div>
+    <div>备案号:东ICP备19170042号</div>
+    <div style="margin-top:8px; color:#5a7a8a;">© 2019-2026 东川市水利局 版权所有</div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script>
+(function () {
+  // ========== 人物/关系/时间线的真实内容数据（仅在JS中存在，源码无明文） ==========
+  const NODE_DATA = {
+    // 林屿（玩家）- s01
+    's01_welcome_identity': {
+      name: '林屿（你）',
+      lines: ['工程科·新任调查员', '★ 第一人称主角'],
+      color: { fill: '#fff', sub: '#aed6f1', tag: '#f1c40f' }
+    },
+    // 方晓 - s02
+    's02_fangxiao_message': {
+      name: '方晓',
+      lines: ['方学礼之女', '东川学院·林屿同班']
+    },
+    // 方学礼 - s15
+    's15_seven_confirm': {
+      name: '方学礼†',
+      lines: ['考古博士·七死者之一', '☠ 2019.6.14 事故遇难'],
+      color: { nameFill: '#ecf0f1', subFill: '#bdc3c7', tagFill: '#e74c3c' }
+    },
+    // 周海生 - s01
+    's01_welcome_identity_zhou': {
+      name: '周海生†',
+      lines: ['原副总工程师', '七死者家属代理', '☠ 2024.2.14 孙卫国灭口'],
+      color: { nameFill: '#ecf0f1', subFill: '#bdc3c7', tagFill: '#e74c3c' }
+    },
+    // 陈素芬 - s09
+    's09_door_1379': {
+      name: '陈素芬',
+      lines: ['原档案室管理员', '现居深圳·关键证人'],
+      color: { nameFill: '#a04000' }
+    },
+    // 赵德明 - s06
+    's06_zhaodm_photoword': {
+      name: '赵德明',
+      lines: ['局长·全面工作', '⚠ 主谋·受贿432万', '致7人死亡+灭口周海生'],
+      color: { nameFill: '#fff', sub: '#fadbd8', tag: '#f1948a' }
+    },
+    // 孙卫国 - s05
+    's05_sunweiguo_passby': {
+      name: '孙卫国',
+      lines: ['安保科科长', '⚠ 从犯·直接行凶', '2024.2.14 推周海生下坝'],
+      color: { nameFill: '#fff', sub: '#fadbd8', tag: '#f1948a' }
+    },
+    // 马建国 - s25
+    's25_majianguo_not_present': {
+      name: '马建国',
+      lines: ['副局长·知情不报', '2024.2.13 在省厅·无作案时间'],
+      color: { nameFill: '#fff', sub: '#d5dbdb' }
+    },
+    // 周小雨 - s04
+    's04_zhouxiaoyu_scratch': {
+      name: '周小雨',
+      lines: ['周海生之女·14岁', '生月：3月（密码钥匙）'],
+      color: { nameFill: '#1e8449' }
+    },
+    // 赵铁柱/张建国 - s11
+    's11_zhao_tiezhu_7not8': {
+      name: '赵铁柱 / 张建国',
+      lines: ['红鲱鱼·入赘改名', '事故当日拉木材·不在现场'],
+      color: { nameFill: '#a04000' }
+    }
+  };
+
+  // 连线真实文案
+  const LINE_DATA = {
+    's02_fangxiao_message': '四年同班',
+    's01_welcome_identity': '继任工位·调查',
+    's19_relative_zhou_fang': '武大同学+连襟',
+    's04_zhouxiaoyu_scratch': '父女',
+    's15_seven_confirm': '父女',
+    's09_door_1379': '武大师妹·暗恋',
+    's20_cdr_302_4m17s': '灭口→',
+    's23_yansti_13_dna': '直接行凶(2024.2.14)',
+    's25_majianguo_not_present': '知情·不报',
+    's11_zhao_tiezhu_7not8': '送烟·封口'
+  };
+
+  // 时间线真实文本
+  const TL_DATA = {
+    // 官方叙事
+    's07_reservoir_photo_rightedge': [
+      '东川水库扩建工程317段副坝因<b>"连续强降雨引发山体滑坡"</b>导致坍塌，7名现场工人不幸失联，后认定全部遇难。定性为<b>不可抗力自然灾害事故</b>。',
+      '坍塌段连夜"清理修复"，通水仪式按时举行，赵德明局长接受市电视台采访，称赞"东川速度"。'
+    ],
+    's24_80w_account_last8': [
+      '（官方未记录·未入账·账目抹平为"工程咨询费"）'
+    ],
+    's21_zhaodm_absent_email': [
+      '周海生副总工程师因"连日加班过度劳累"，于凌晨前往大坝巡查时<b>意外失足坠坝</b>，经抢救无效死亡。'
+    ],
+    's22_zhaodm_absent_schedule': [
+      '赵德明局长临时前往昆明参加紧急水利会议（有机票为证），未在东川市。'
+    ],
+    's09_door_1379': [
+      '档案室管理员陈素芬因"个人职业发展原因"自愿离职，前往深圳工作，交接手续齐全。'
+    ],
+    's01_welcome_identity': [
+      '东川水库水质达标率99%，运行安全稳定。欢迎有志青年报考东川市水利局。'
+    ],
+    // 真实叙事
+    's10_collapse_line_straight': [
+      '青溪村发现明代土司墓葬群，方学礼博士（武大考古）率队现场发掘，被赵德明以"工期延误"强行驱离。<b>墓葬群被直接回填于副坝317段之下</b>（出土文物流失约13件）。'
+    ],
+    's28_chencf_id_19851024': [
+      '赵德明授意孙卫国：<b>坑壁木模用旧料（新料17倍价格被贪）</b>→陈长发发现裂缝3处→孙卫国不让换→当晚坍塌。裂缝呈直线=人为爆破，7人全部被埋（尸检：均为窒息死亡）。'
+    ],
+    's26_shoucai_2083': [
+      '7具尸体连夜运出，匆匆火化（无家属签字）。方学礼家属获赔71万·私了协议签字是伪造笔迹。'
+    ],
+    's20_cdr_302_4m17s': [
+      'CDR通话记录：孙卫国→赵德明<b>4分17秒</b>，内容（录音笔A）："周海生已经查到寿材那边了…要不要…" 赵德明："就按之前说的做。"'
+    ],
+    's23_yansti_13_dna': [
+      '孙卫国在大坝47米高坝肩→推周海生坠下→抽13根黄鹤楼1916（烟蒂13号DNA匹配99.998%）。'
+    ],
+    'point_double_insurance': [
+      '你，林屿，坐周海生生前工位。31步走完，12项举报信填写完整，提交省纪委监委。<b>结局由你手里的证据决定。</b>'
+    ]
+  };
+
+  // 玩家身份卡KV项的真实内容（源码不写入，通过JS解锁后注入）
+  const KV_DATA = {
+    's01_welcome_identity': '工程科3楼302靠窗 —— 原周海生副总工程师的工位',
+    's02_fangxiao_message': '方晓（四年同班同学）：「坐他的椅子，替他把没做完的事做完。」',
+    's19_relative_zhou_fang': '周海生媳妇林秀娟的妹妹林秀兰 = 方晓的妈妈 → 周方两家是姨表亲',
+    's18_oa_login_success': '31步走完，12项举报信填完，提交省纪委监委'
+  };
+
+  // need-clue-box真实内容（源码不写入）
+  const CLUE_BOX_DATA = {
+    's15_seven_confirm': '<b>七名遇难工人完整名单（2019.6.14 坍塌事故）：</b><br>' +
+      '方学礼（考古博士·现场监理）、吴振兴（焊工）、王建国（模板工）、刘德贵（架子工）、<br>' +
+      '陈长发（混凝土班班长）、李明辉（电工）、张宝强（土方班班长）。<br>' +
+      '<span style="color:#a04000;">注意：赵铁柱（入赘改姓张建国）事故当日去青溪村拉木材·不在现场·非死者，是红鲱鱼。</span>',
+    's29_sony_pen_distinguish': '<b>S结局通关红线：</b>时间线真实侧的 8 个关键节点你必须在举报信12项字段里点出 7 个以上。<br>' +
+      '特别是：<b>伪造笔迹、旧料价差、CDR4分17秒、赵德明实际在翠湖茶楼（不在昆明）、烟蒂13号DNA</b>——这5个是铁证，少一个就上不了96分。'
+  };
+  const STORAGE_KEY = 'dc_sl_archives_v1';
+
+  function getUnlocked() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return {};
+      return JSON.parse(raw).unlocked || {};
+    } catch (e) { return {}; }
+  }
+
+  const ALL_STEPS_MAP = {
+    s01:'s01_welcome_identity', s02:'s02_fangxiao_message', s03:'s03_rh_13_candy',
+    s04:'s04_zhouxiaoyu_scratch', s05:'s05_sunweiguo_passby', s06:'s06_zhaodm_photoword',
+    s07:'s07_reservoir_photo_rightedge', s08:'s08_zhalan_197', s09:'s09_door_1379',
+    s10:'s10_collapse_line_straight', s11:'s11_zhao_tiezhu_7not8', s12:'s12_wuxing_0743',
+    s13:'s13_cross_zhou_phone', s14:'s14_caesar_19790315', s15:'s15_seven_confirm',
+    s16:'s16_oa_watermark1', s17:'s17_oa_watermark2', s18:'s18_oa_login_success',
+    s19:'s19_relative_zhou_fang', s20:'s20_cdr_302_4m17s', s21:'s21_zhaodm_absent_email',
+    s22:'s22_zhaodm_absent_schedule', s23:'s23_yansti_13_dna', s24:'s24_80w_account_last8',
+    s25:'s25_majianguo_not_present', s26:'s26_shoucai_2083', s27:'s27_kuaidi_0317',
+    s28:'s28_chencf_id_19851024', s29:'s29_sony_pen_distinguish', s30:'point_double_insurance',
+    s31:'final_s_end'
+  };
+
+  function isUnlocked(needKey) {
+    const unlocked = getUnlocked();
+    if (unlocked[needKey]) return true;
+    for (const sid in ALL_STEPS_MAP) {
+      if (ALL_STEPS_MAP[sid] === needKey && unlocked[sid]) return true;
+    }
+    return false;
+  }
+
+  // 节点特殊映射（有些节点需要用特定的数据key）
+  const NODE_SPECIAL = {
+    's01_welcome_identity': 's01_welcome_identity'  // 林屿
+  };
+
+  // 节点与真实数据key的映射
+  function getNodeDataKey(need) {
+    // 周海生节点need也是s01，但要特殊处理
+    return need;
+  }
+
+  function renderNodes() {
+    document.querySelectorAll('.rel-node').forEach(function (g) {
+      const need = g.getAttribute('data-need');
+      if (isUnlocked(need)) {
+        g.classList.remove('locked-node');
+        // 获取节点数据
+        let data = NODE_DATA[need];
+        // 特殊处理：周海生节点（need也是s01_welcome_identity但要显示周海生信息）
+        const className = g.getAttribute('class') || '';
+        if (need === 's01_welcome_identity' && className.indexOf('rel-node') !== -1) {
+          // 检查这是林屿还是周海生节点
+          const rectX = parseFloat(g.querySelector('rect').getAttribute('x'));
+          if (rectX >= 200 && rectX < 400) {
+            data = NODE_DATA['s01_welcome_identity_zhou'];
+          }
+        }
+        if (!data) return;
+        // 填充姓名
+        const nameEl = g.querySelector('.name-text');
+        if (nameEl) nameEl.textContent = data.name;
+        // 填充子行
+        const lines = data.lines || [];
+        const line1 = g.querySelector('.sub-line1');
+        const line2 = g.querySelector('.sub-line2');
+        const line3 = g.querySelector('.sub-line3');
+        const subEl = g.querySelector('.sub-text');
+        const tagEl = g.querySelector('.tag-text');
+        if (subEl && lines[0]) subEl.textContent = lines[0];
+        if (line1 && lines[0]) line1.textContent = lines[0];
+        if (line2 && lines[1]) line2.textContent = lines[1];
+        if (line3 && lines[2]) line3.textContent = lines[2];
+        if (tagEl && lines[2]) tagEl.textContent = lines[2];
+        // 颜色处理
+        if (data.color) {
+          if (data.color.nameFill) {
+            const nt = g.querySelector('.name-text');
+            if (nt) nt.setAttribute('fill', data.color.nameFill);
+          }
+        }
+      } else {
+        g.classList.add('locked-node');
+      }
+    });
+  }
+
+  function renderLines() {
+    document.querySelectorAll('.rel-line').forEach(function (g) {
+      const need = g.getAttribute('data-need');
+      if (isUnlocked(need)) {
+        g.classList.remove('locked-line');
+        const label = g.querySelector('.line-label');
+        if (label && LINE_DATA[need]) {
+          label.textContent = LINE_DATA[need];
+        }
+      } else {
+        g.classList.add('locked-line');
+        const label = g.querySelector('.line-label');
+        if (label) label.textContent = '···线索待收集···';
+      }
+    });
+  }
+
+  function renderTimeline() {
+    const items = document.querySelectorAll('.tl-item');
+    // 按need分组收集文本
+    const tlGroups = {};
+    items.forEach(function (item) {
+      const need = item.getAttribute('data-need');
+      if (!tlGroups[need]) tlGroups[need] = [];
+      tlGroups[need].push(item);
+    });
+    for (const need in tlGroups) {
+      const group = tlGroups[need];
+      const unlocked = isUnlocked(need);
+      const texts = TL_DATA[need] || [];
+      group.forEach(function (item, idx) {
+        const textEl = item.querySelector('.tl-text');
+        if (unlocked) {
+          item.classList.remove('locked-tl');
+          if (textEl && texts[idx]) {
+            textEl.innerHTML = texts[idx];
+          }
+        } else {
+          item.classList.add('locked-tl');
+          if (textEl) textEl.textContent = '???';
+        }
+      });
+    }
+  }
+
+  function renderNeedClueBoxes() {
+    // 处理need-clue-box（七人名单、S结局等）
+    document.querySelectorAll('.need-clue-box').forEach(function (box) {
+      const need = box.getAttribute('data-need');
+      if (!need) return;
+      const realEl = box.querySelector('.clue-real-content');
+      const hiddenEl = box.querySelector('.clue-hidden');
+      if (isUnlocked(need)) {
+        box.classList.add('unlocked');
+        if (realEl && CLUE_BOX_DATA[need]) {
+          realEl.innerHTML = CLUE_BOX_DATA[need];
+        }
+      } else {
+        box.classList.remove('unlocked');
+      }
+    });
+    // 身份卡kv项（动态注入真实内容）
+    document.querySelectorAll('.player-card .kv > div').forEach(function (el) {
+      const need = el.getAttribute('data-need');
+      if (!need) return;
+      const realSpan = el.querySelector('.kv-real-content');
+      const ph = el.querySelector('.content-placeholder');
+      if (isUnlocked(need)) {
+        if (realSpan) {
+          realSpan.textContent = KV_DATA[need] || '';
+          realSpan.style.display = 'inline';
+        }
+        if (ph) ph.style.display = 'none';
+      } else {
+        if (realSpan) {
+          realSpan.textContent = '';
+          realSpan.style.display = 'none';
+        }
+        if (ph) ph.style.display = 'block';
+      }
+    });
+  }
+
+  function renderAll() {
+    renderNodes();
+    renderLines();
+    renderTimeline();
+    renderNeedClueBoxes();
+  }
+
+  // 初始解锁Step18和19
+  try {
+    if (window.DCArchive) {
+      DCArchive.unlock('s18_oa_login_success');
+      setTimeout(function () { DCArchive.unlock('s19_relative_zhou_fang'); }, 600);
+    }
+  } catch (e) {}
+
+  // 渲染
+  renderAll();
+  setInterval(renderAll, 1200);
+})();
+</script>
+</body>
+</html>
